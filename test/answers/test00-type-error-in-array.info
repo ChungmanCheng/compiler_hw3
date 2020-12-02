@@ -1,0 +1,5 @@
+11:10: redefined variable a
+27:9: undeclared variable sum
+27:16: undeclared variable sum
+39:6: type errors on assignment statement
+41:29: type errors in arithmetic expressions +
