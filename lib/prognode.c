@@ -35,7 +35,7 @@ void ProgNode_visit(void* node){
 
     // add sym into symbol table
     SHOW_NEWSYM(temp->id);
-    listRoot = newlist(temp->id, scope, "void");
+    listRoot = newdatalist(temp->id, scope, Void, Data);
 
     // Visit inside
     if (temp->identlist != NULL)

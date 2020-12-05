@@ -12,11 +12,29 @@ void list_push_back(list* root, list* next){
     return;
 }
 
-list* newlist(char* id, int scope, char* type){
+list* newdatalist(char* id, int scope, returnType type, dataType nodetype){
     list* temp = (list*) malloc ( sizeof(list) );
-    temp->data.id = id;
-    temp->data.scope = scope;
-    temp->data.type = type;
+    temp->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+    temp->id = id;
+    temp->scope = scope;
+    temp->nodeType = nodetype;
+    temp->data->type = type;
+    temp->data->next = NULL;
+    temp->next = NULL;
+    temp->prev = NULL;
+    temp->push_back = list_push_back;
+
+    return temp;
+}
+
+list* newarraylist(char* id, int scope, returnType type, dataType nodetype){
+    list* temp = (list*) malloc ( sizeof(list) );
+    temp->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
+    temp->id = id;
+    temp->scope = scope;
+    temp->nodeType = nodetype;
+    temp->data->type = type;
+    temp->data->next = NULL;
     temp->next = NULL;
     temp->prev = NULL;
     temp->push_back = list_push_back;
@@ -30,18 +48,54 @@ void list_printTable(list* root){
         while(curr->next != NULL){
             curr = curr->next;
         }
-        fprintf(stdout, SYMTAB_ENTRY_FMT, curr->data.id, curr->data.scope, curr->data.type);
-        while(curr->prev != NULL){
+        while(curr != NULL){
+            char dataTemp[40] = { };
+            char dataCurr[40] = { };
+            if ( (curr->nodeType == Data) || (curr->nodeType == Array_Data) ){
+                // data
+                symbolobj* temp = curr->data;
+                while(temp->type == Array){
+                    strcpy( dataCurr, dataTemp );
+                    sprintf(dataTemp, "[%d~%d]%s", ((arraysymbolobj*)temp)->start, ((arraysymbolobj*)temp)->end, dataCurr);
+                    temp = ((arraysymbolobj*)temp)->data;
+                }
+
+                strcpy( dataCurr, dataTemp );
+                switch (temp->type)
+                {
+                case Void:
+                    sprintf(dataTemp, "void%s", dataCurr);
+                    break;
+
+                case Int:
+                    sprintf(dataTemp, "int%s", dataCurr);
+                    break;
+
+                case Real:
+                    sprintf(dataTemp, "real%s", dataCurr);
+                    break;
+
+                case String:
+                    sprintf(dataTemp, "string%s", dataCurr);
+                    break;
+                
+                default:
+                    break;
+                }
+                fprintf(stdout, SYMTAB_ENTRY_FMT, curr->id, curr->scope, dataTemp);
+            }else{
+                // function or procedure
+                
+            }
             curr = curr->prev;
-            fprintf(stdout, SYMTAB_ENTRY_FMT, curr->data.id, curr->data.scope, curr->data.type);
         }
     }
 }
 
-int checkList( list* root, char* id, int scope ){
+int checkList( list* root, char* id, int scope, dataType type ){
     list* curr = root;
     while (curr != NULL){
-        if ( (!strcmp(curr->data.id, id)) && (curr->data.scope == scope) ){
+        if ( (!strcmp(curr->id, id)) && (curr->scope == scope) && (curr->nodeType == type ) ){
             return 1;
         }
         curr = curr->next;
@@ -53,12 +107,11 @@ int checkList( list* root, char* id, int scope ){
 void listRemove( list* listRoot, int scope){
     list* curr = listRoot;
     while(curr != NULL){
-        if ( curr->data.scope > scope ){
+        if ( curr->scope > scope ){
             if (curr->next != NULL)
                 curr->next->prev = curr->prev;
             if (curr->prev != NULL)
                 curr->prev->next = curr->next;
-            free(curr);
         }
         curr = curr->next;
     }
