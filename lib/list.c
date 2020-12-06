@@ -113,7 +113,7 @@ void list_printTable(list* root){
                     }
 
                     strcpy( ArrayCurr, ArrayTemp );
-                    switch (temp->type)
+                    switch (tempArray->type)
                     {
                     case Void:
                         sprintf(ArrayTemp, "void%s", ArrayCurr);
@@ -149,18 +149,30 @@ void list_printTable(list* root){
                 switch (temp->type)
                 {
                 case Void:
-                    sprintf(dataTemp, "void (%s)", dataCurr);
+                    if (!strcmp(dataCurr, ""))
+                        sprintf(dataTemp, "void");
+                    else
+                        sprintf(dataTemp, "void (%s)", dataCurr);
                     break;
 
                 case Int:
+                    if (!strcmp(dataCurr, ""))
+                        sprintf(dataTemp, "int");
+                    else
                     sprintf(dataTemp, "int (%s)", dataCurr);
                     break;
 
                 case Real:
+                    if (!strcmp(dataCurr, ""))
+                        sprintf(dataTemp, "real");
+                    else
                     sprintf(dataTemp, "real (%s)", dataCurr);
                     break;
 
                 case String:
+                    if (!strcmp(dataCurr, ""))
+                        sprintf(dataTemp, "string");
+                    else
                     sprintf(dataTemp, "string (%s)", dataCurr);
                     break;
                 
