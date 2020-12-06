@@ -61,7 +61,7 @@ void DeclarNode_visit(void* node){
             }else{
                 // ARRAY [ num .. num ] OF type
 
-                list* listTemp = newarraylist(curr->id, scope, Array, Array_Data);
+                list* listTemp = newarraylist(curr->id, scope, Array, Data);
                 list_push_back( listRoot, listTemp);
                 TypeNode* curr_type = temp->typenode;
                 symbolobj* curr_array = listTemp->data;
@@ -79,7 +79,7 @@ void DeclarNode_visit(void* node){
                 curr_type = curr_type->type;
                 ((arraysymbolobj*)curr_array)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
                 curr_array = ((arraysymbolobj*)curr_array)->data;
-                curr_array->next = NULL;
+                
                 // 0: integer, 1: real, 2: string
                 switch (curr_type->standtypenode->type)
                 {

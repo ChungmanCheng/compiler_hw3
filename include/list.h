@@ -8,11 +8,10 @@
 
 typedef enum{ Int, Void, Real, String, Array } returnType;
 
-typedef enum{ Function, Procedure, Data, Array_Data } dataType;
+typedef enum{ Function, Data } dataType;
 
 typedef struct SymbolObj{
     returnType type;
-    struct symbolobj* next;
 } symbolobj;
 
 typedef struct ArraySymbolObj{
@@ -20,7 +19,17 @@ typedef struct ArraySymbolObj{
     symbolobj* data;
     int start;
     int end;
-}arraysymbolobj;
+} arraysymbolobj;
+
+typedef struct PassInObj{
+    symbolobj* data;
+    symbolobj* next;
+} passinobj;
+
+typedef struct FuncSymbolObj{
+    returnType type;
+    symbolobj* passInType;
+} funcsymbolobj;
 
 typedef struct List{
     dataType nodeType;
@@ -29,15 +38,16 @@ typedef struct List{
     symbolobj* data;
     struct List* next;
     struct List* prev;
-    void (*push_back)(struct List*, struct List*);
 } list;
 
-void list_push_back(list*, list*);
+void list_push_back( list*, list* );
 
-list* newdatalist(char*, int, returnType, dataType);
+list* newdatalist( char*, int, returnType, dataType );
 
-list* newarraylist(char*, int, returnType, dataType);
+list* newarraylist( char*, int, returnType, dataType );
 
-void list_printTable(list*);
+list* newfunclist( char*, int, returnType, dataType );
+
+void list_printTable( list* );
 
 #endif

@@ -8,6 +8,7 @@ add new symbol e
 add new symbol g
 add new symbol h
 add new symbol k
+add new symbol sort
 create a scope
 add new symbol a
 add new symbol b
@@ -19,6 +20,7 @@ close a scope
 |c           |   1   |int                                             |
 |b           |   1   |int                                             |
 |a           |   1   |int                                             |
+|sort        |   0   |void ()                                         |
 |k           |   0   |real[23~57][23~57]                              |
 |h           |   0   |real                                            |
 |g           |   0   |real                                            |
@@ -29,13 +31,20 @@ close a scope
 |a           |   0   |int                                             |
 |foo         |   0   |void                                            |
 -----------------------------------------------------------------------
+add new symbol addition
 create a scope
+add new symbol a
+add new symbol b
 add new symbol c
 close a scope
 -----------------------------------------------------------------------
 |    Name    | Scope |                   Type                         |
 -----------------------------------------------------------------------
 |c           |   1   |int                                             |
+|b           |   1   |int                                             |
+|a           |   1   |int                                             |
+|addition    |   0   |int (int, int)                                  |
+|sort        |   0   |void ()                                         |
 |k           |   0   |real[23~57][23~57]                              |
 |h           |   0   |real                                            |
 |g           |   0   |real                                            |
@@ -50,6 +59,8 @@ close a scope
 -----------------------------------------------------------------------
 |    Name    | Scope |                   Type                         |
 -----------------------------------------------------------------------
+|addition    |   0   |int (int, int)                                  |
+|sort        |   0   |void ()                                         |
 |k           |   0   |real[23~57][23~57]                              |
 |h           |   0   |real                                            |
 |g           |   0   |real                                            |

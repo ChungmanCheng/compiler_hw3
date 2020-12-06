@@ -19,10 +19,8 @@ list* newdatalist(char* id, int scope, returnType type, dataType nodetype){
     temp->scope = scope;
     temp->nodeType = nodetype;
     temp->data->type = type;
-    temp->data->next = NULL;
     temp->next = NULL;
     temp->prev = NULL;
-    temp->push_back = list_push_back;
 
     return temp;
 }
@@ -34,10 +32,22 @@ list* newarraylist(char* id, int scope, returnType type, dataType nodetype){
     temp->scope = scope;
     temp->nodeType = nodetype;
     temp->data->type = type;
-    temp->data->next = NULL;
     temp->next = NULL;
     temp->prev = NULL;
-    temp->push_back = list_push_back;
+
+    return temp;
+}
+
+list* newfunclist( char* id, int scope, returnType type, dataType nodetype ){
+    list* temp = (list*) malloc ( sizeof(list) );
+    temp->data = (symbolobj*) malloc ( sizeof(funcsymbolobj) );
+    temp->data->type = type;
+    ((funcsymbolobj*)temp->data)->passInType = NULL;
+    temp->id = id;
+    temp->scope = scope;
+    temp->nodeType = nodetype;
+    temp->next = NULL;
+    temp->prev = NULL;
 
     return temp;
 }
@@ -51,7 +61,7 @@ void list_printTable(list* root){
         while(curr != NULL){
             char dataTemp[40] = { };
             char dataCurr[40] = { };
-            if ( (curr->nodeType == Data) || (curr->nodeType == Array_Data) ){
+            if ( curr->nodeType == Data ){
                 // data
                 symbolobj* temp = curr->data;
                 while(temp->type == Array){
@@ -85,7 +95,81 @@ void list_printTable(list* root){
                 fprintf(stdout, SYMTAB_ENTRY_FMT, curr->id, curr->scope, dataTemp);
             }else{
                 // function or procedure
+                symbolobj* temp = curr->data;
+
+                int counter = 0;
+                // check pass in data type
+                passinobj* tempPassInType = ((funcsymbolobj*)curr->data)->passInType;
+                while (tempPassInType != NULL){
+                    // check type
+                    
+                    char ArrayTemp[40] = { };
+                    char ArrayCurr[40] = { };
+                    symbolobj* tempArray = tempPassInType->data;
+                    while(tempArray->type == Array){
+                        strcpy( ArrayCurr, ArrayTemp );
+                        sprintf(ArrayTemp, "[%d~%d]%s", ((arraysymbolobj*)tempArray)->start, ((arraysymbolobj*)tempArray)->end, ArrayCurr);
+                        tempArray = ((arraysymbolobj*)tempArray)->data;
+                    }
+
+                    strcpy( ArrayCurr, ArrayTemp );
+                    switch (temp->type)
+                    {
+                    case Void:
+                        sprintf(ArrayTemp, "void%s", ArrayCurr);
+                        break;
+
+                    case Int:
+                        sprintf(ArrayTemp, "int%s", ArrayCurr);
+                        break;
+
+                    case Real:
+                        sprintf(ArrayTemp, "real%s", ArrayCurr);
+                        break;
+
+                    case String:
+                        sprintf(ArrayTemp, "string%s", ArrayCurr);
+                        break;
+                    
+                    default:
+                        break;
+                    }
+                    strcpy( dataCurr, dataTemp );
+                    if (counter > 0)
+                        sprintf(dataTemp, "%s, %s", dataCurr, ArrayTemp);
+                    else
+                        sprintf(dataTemp, "%s", ArrayTemp);
+
+                    tempPassInType = tempPassInType->next;
+                    counter++;
+                }
+
+                // check return data type
+                strcpy( dataCurr, dataTemp );
+                switch (temp->type)
+                {
+                case Void:
+                    sprintf(dataTemp, "void (%s)", dataCurr);
+                    break;
+
+                case Int:
+                    sprintf(dataTemp, "int (%s)", dataCurr);
+                    break;
+
+                case Real:
+                    sprintf(dataTemp, "real (%s)", dataCurr);
+                    break;
+
+                case String:
+                    sprintf(dataTemp, "string (%s)", dataCurr);
+                    break;
                 
+                default:
+                    break;
+                }
+                
+                // output
+                fprintf(stdout, SYMTAB_ENTRY_FMT, curr->id, curr->scope, dataTemp);
             }
             curr = curr->prev;
         }
@@ -95,7 +179,9 @@ void list_printTable(list* root){
 int checkList( list* root, char* id, int scope, dataType type ){
     list* curr = root;
     while (curr != NULL){
-        if ( (!strcmp(curr->id, id)) && (curr->scope == scope) && (curr->nodeType == type ) ){
+        //  function overload
+        // if ( (!strcmp(curr->id, id)) && (curr->scope == scope) && (curr->nodeType == type ) ){
+        if ( (!strcmp(curr->id, id)) && (curr->scope == scope) ){
             return 1;
         }
         curr = curr->next;
