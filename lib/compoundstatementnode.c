@@ -19,6 +19,9 @@ Node* newCompoundStatementNode( int firstLine, int firstColumn, OptionalStatemen
 
 void CompoundStatementNode_visit(void* node){
     CompoundStatementNode* temp = (CompoundStatementNode*) node;
-    
+    // printf("%d: %d CompoundStatementNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
+    if (temp->statements != NULL)
+        temp->statements->node.visit(temp->statements);
+
     return;
 }

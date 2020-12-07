@@ -15,5 +15,14 @@ Node* newStatementListNode( int firstLine, int firstColumn, StatementListNode* s
 }
 
 void StatementListNode_visit(void* node){
+    StatementListNode* temp = (StatementListNode*) node;
+    // printf("%d: %d StatementListNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
+    // if (temp->nextList != NULL){
+    //     temp->nextList->node.visit(temp->nextList);
+    // }
+    // if ((temp->statementnode != NULL){
+    //     temp->statementnode->node.visit(temp->statementnode);
+    // }
 
+    return;
 }

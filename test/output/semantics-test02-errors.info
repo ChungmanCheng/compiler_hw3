@@ -1,0 +1,4 @@
+15:7: redefined variable a
+20:10: redefined variable a
+35:3: redefined function addition
+43:3: redefined function addition

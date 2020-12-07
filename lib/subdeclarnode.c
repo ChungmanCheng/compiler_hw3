@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "subdeclarnode.h"
 #include "list.h"
@@ -26,146 +27,222 @@ void SubDeclarNode_visit(void* node){
     SubDeclarNode* temp = (SubDeclarNode*) node;
 
     if (temp->head != NULL){
-        if ( checkList(listRoot, temp->head->id, scope, Function) ){
-            fprintf(stderr, REDEF_VAR, temp->head->node.loc.first_line, temp->head->node.loc.first_column, temp->head->id );
-        }else{
-            SHOW_NEWSYM(temp->head->id);
-            list* tempList;
-            if (temp->head->type){
-                // PROCEDURE
-                
-                tempList = newfunclist( temp->head->id, scope, Void, Function );
-                list_push_back( listRoot, tempList );
-
+        
+        list* tempList;
+        int check = 0;
+        if (temp->head->type){
+            // PROCEDURE
+            
+            tempList = newfunclist( temp->head->id, scope, Void, Function );
+            if ( checkList(listRoot, temp->head->id, scope, Function) ){
+                fprintf(stderr, REDEF_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
             }else{
-                // FUNCTION
-                switch (temp->head->standard_type->type)
-                {
+                SHOW_NEWSYM(temp->head->id);
+                list_push_back( listRoot, tempList );
+            }
+
+        }else{
+            
+            // FUNCTION
+            switch (temp->head->standard_type->type)
+            {
+            case 0:
+                /* code */
+                tempList = newfunclist( temp->head->id, scope, Int, Function );
+                break;
+
+            case 1:
+                tempList = newfunclist( temp->head->id, scope, Real, Function );
+                break;
+
+            case 2:
+                tempList = newfunclist( temp->head->id, scope, String, Function );
+                break;
+            
+            default:
+                break;
+            }
+
+            
+            StatementListNode* checkReturnType = NULL;
+            if ( temp->compoundstatementnode->statements != NULL )
+                checkReturnType = temp->compoundstatementnode->statements->statementlistnode;
+            while(checkReturnType != NULL){
+                if (checkReturnType->statementnode != NULL){
+                    if ( checkReturnType->statementnode->type == 0 ){
+                        if ( !strcmp(temp->head->id, checkReturnType->statementnode->varnode->id) ){
+                            check = 1;
+                            break;
+                        }
+                    }
+                }
+                checkReturnType = checkReturnType->nextList;
+            }
+            
+            if ( checkList(listRoot, temp->head->id, scope, Function) ){
+                fprintf(stderr, REDEF_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
+            }else{
+                SHOW_NEWSYM(temp->head->id);
+                list_push_back( listRoot, tempList );
+            }
+
+            if (!check)
+                fprintf(stderr, RETURN_VAL, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
+                
+        }
+        
+        // create a scope
+        SHOW_NEWSCP();
+        scope++;
+
+        // pass in data type
+        ParameterListNode* curr = NULL;
+        if (temp->head->arguments != NULL)
+            curr = temp->head->arguments->parameterlist;
+        while(curr != NULL){
+            // parameterList
+
+            // add pass in data type
+            returnType typeTemp;
+            if (curr->typenode->standtypenode != NULL){
+                // standtype
+                switch(curr->typenode->standtypenode->type){
                 case 0:
-                    /* code */
-                    tempList = newfunclist( temp->head->id, scope, Int, Function );
+                    typeTemp = Int;
                     break;
 
                 case 1:
-                    tempList = newfunclist( temp->head->id, scope, Real, Function );
+                    typeTemp = Real;
                     break;
 
                 case 2:
-                    tempList = newfunclist( temp->head->id, scope, String, Function );
+                    typeTemp = String;
                     break;
-                
+
                 default:
                     break;
                 }
-                list_push_back( listRoot, tempList );
-            }
-            // create a scope
-            SHOW_NEWSCP();
-            scope++;
 
-            // pass in data type
-            ParameterListNode* curr = NULL;
-            if (temp->head->arguments != NULL)
-                curr = temp->head->arguments->parameterlist;
-            while(curr != NULL){
-                // parameterList
-
-                // add pass in data type
-                returnType typeTemp;
-                if (curr->typenode->standtypenode != NULL){
-                    // standtype
-                    switch(curr->typenode->standtypenode->type){
-                    case 0:
-                        typeTemp = Int;
-                        break;
-
-                    case 1:
-                        typeTemp = Real;
-                        break;
-
-                    case 2:
-                        typeTemp = String;
-                        break;
-
-                    default:
-                        break;
-                    }
-
-                    IdentListNode* idList = curr->identlistnode;
-                    ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
-                    ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
-                    ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data->type = typeTemp;
-                    passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                IdentListNode* idList = curr->identlistnode;
+                ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
+                ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data->type = typeTemp;
+                passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                if ( checkList(listRoot, idList->id, scope, Data) ){
+                    fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                }else{
+                    SHOW_NEWSYM(idList->id);
+                    list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
+                }
+                passinobjTemp->next = NULL;
+                while( idList->PrevNode != NULL ){
+                    passinobjTemp->next = (passinobj*) malloc ( sizeof(passinobj) );
+                    ((passinobj*)passinobjTemp->next)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                    idList = idList->PrevNode;
+                    passinobjTemp = (passinobj*)(passinobjTemp->next);
+                    passinobjTemp->data->type = typeTemp;
                     if ( checkList(listRoot, idList->id, scope, Data) ){
                         fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                     }else{
                         SHOW_NEWSYM(idList->id);
                         list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
                     }
-                    passinobjTemp->next = NULL;
-                    while( idList->PrevNode != NULL ){
-                        passinobjTemp->next = (passinobj*) malloc ( sizeof(passinobj) );
-                        ((passinobj*)passinobjTemp->next)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
-                        idList = idList->PrevNode;
-                        passinobjTemp = (passinobj*)(passinobjTemp->next);
-                        passinobjTemp->data->type = typeTemp;
-                        if ( checkList(listRoot, idList->id, scope, Data) ){
-                            fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
-                        }else{
-                            SHOW_NEWSYM(idList->id);
-                            list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
-                        }
-                    }
+                }
 
-                }else{
-                    // array
-                    
-                    IdentListNode* idList = curr->identlistnode;
+            }else{
+                // array
+                
+                IdentListNode* idList = curr->identlistnode;
 
-                    ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
-                    ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
-                    ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->type = Array;
-                    ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->start = curr->typenode->array_start;
-                    ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->end = curr->typenode->array_end;
+                ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
+                ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
+                ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->type = Array;
+                ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->start = curr->typenode->array_start;
+                ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->end = curr->typenode->array_end;
 
-                    passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
-                    TypeNode* currType = curr->typenode;
-                    symbolobj* currArray = passinobjTemp->data;
+                passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                TypeNode* currType = curr->typenode;
+                symbolobj* currArray = passinobjTemp->data;
 
-                    while(currType->type->type != NULL){
-                        ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
-                        currArray = ((arraysymbolobj*)currArray)->data;
-                        currType = currType->type;
-                        ((arraysymbolobj*)currArray)->start = currType->array_start;
-                        ((arraysymbolobj*)currArray)->end = currType->array_end;
-                        ((arraysymbolobj*)currArray)->type = Array;
-                    }
-                    currType = currType->type;
-                    ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                while(currType->type->type != NULL){
+                    ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
                     currArray = ((arraysymbolobj*)currArray)->data;
+                    currType = currType->type;
+                    ((arraysymbolobj*)currArray)->start = currType->array_start;
+                    ((arraysymbolobj*)currArray)->end = currType->array_end;
+                    ((arraysymbolobj*)currArray)->type = Array;
+                }
+                currType = currType->type;
+                ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                currArray = ((arraysymbolobj*)currArray)->data;
+                
+                // 0: integer, 1: real, 2: string
+                switch (currType->standtypenode->type)
+                {
+                case 0:
+                    /* code */
+                    currArray->type = Int;
+                    break;
+
+                case 1:
+                    currArray->type = Real;
+                    break;
+
+                case 2:
+                    currArray->type = String;
+                    break;
+                
+                default:
+                    break;
+                }
+                
+                passinobjTemp->next = NULL;
+                list* listTemp;
+                if ( checkList(listRoot, idList->id, scope, Data) ){
+                    fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                }else{
+                    SHOW_NEWSYM(idList->id);
+                    listTemp = newarraylist(idList->id, scope, Array, Data);
+                    list_push_back( listRoot, listTemp);
+                    TypeNode* curr_type = curr->typenode;
+                    symbolobj* curr_array = listTemp->data;
+                    ((arraysymbolobj*)curr_array)->start = curr_type->array_start;
+                    ((arraysymbolobj*)curr_array)->end = curr_type->array_end;                        
+                    while(curr_type->type->type != NULL ){
+                        ((arraysymbolobj*)curr_array)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
+                        curr_array = ((arraysymbolobj*)curr_array)->data;
+                        curr_type = curr_type->type;
+                        ((arraysymbolobj*)curr_array)->start = curr_type->array_start;
+                        ((arraysymbolobj*)curr_array)->end = curr_type->array_end;
+                        ((arraysymbolobj*)curr_array)->type = Array;
+                    }
+                    curr_type = curr_type->type;
+                    ((arraysymbolobj*)curr_array)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                    curr_array = ((arraysymbolobj*)curr_array)->data;
                     
                     // 0: integer, 1: real, 2: string
-                    switch (currType->standtypenode->type)
+                    switch (curr_type->standtypenode->type)
                     {
                     case 0:
                         /* code */
-                        currArray->type = Int;
+                        curr_array->type = Int;
                         break;
 
                     case 1:
-                        currArray->type = Real;
+                        curr_array->type = Real;
                         break;
 
                     case 2:
-                        currArray->type = String;
+                        curr_array->type = String;
                         break;
                     
                     default:
                         break;
                     }
+                }
+
+                while(idList->PrevNode != NULL){
                     
-                    passinobjTemp->next = NULL;
-                    list* listTemp;
                     if ( checkList(listRoot, idList->id, scope, Data) ){
                         fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                     }else{
@@ -209,97 +286,51 @@ void SubDeclarNode_visit(void* node){
                         }
                     }
 
-                    while(idList->PrevNode != NULL){
-                        
-                        if ( checkList(listRoot, idList->id, scope, Data) ){
-                            fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
-                        }else{
-                            SHOW_NEWSYM(idList->id);
-                            listTemp = newarraylist(idList->id, scope, Array, Data);
-                            list_push_back( listRoot, listTemp);
-                            TypeNode* curr_type = curr->typenode;
-                            symbolobj* curr_array = listTemp->data;
-                            ((arraysymbolobj*)curr_array)->start = curr_type->array_start;
-                            ((arraysymbolobj*)curr_array)->end = curr_type->array_end;                        
-                            while(curr_type->type->type != NULL ){
-                                ((arraysymbolobj*)curr_array)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
-                                curr_array = ((arraysymbolobj*)curr_array)->data;
-                                curr_type = curr_type->type;
-                                ((arraysymbolobj*)curr_array)->start = curr_type->array_start;
-                                ((arraysymbolobj*)curr_array)->end = curr_type->array_end;
-                                ((arraysymbolobj*)curr_array)->type = Array;
-                            }
-                            curr_type = curr_type->type;
-                            ((arraysymbolobj*)curr_array)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
-                            curr_array = ((arraysymbolobj*)curr_array)->data;
-                            
-                            // 0: integer, 1: real, 2: string
-                            switch (curr_type->standtypenode->type)
-                            {
-                            case 0:
-                                /* code */
-                                curr_array->type = Int;
-                                break;
+                    idList = idList->PrevNode;
+                    passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                    TypeNode* currType = curr->typenode;
+                    symbolobj* currArray = passinobjTemp->data;
+                    ((arraysymbolobj*)currArray)->start = currType->array_start;
+                    ((arraysymbolobj*)currArray)->end = currType->array_end;
+                    ((arraysymbolobj*)currArray)->type = Array;
 
-                            case 1:
-                                curr_array->type = Real;
-                                break;
-
-                            case 2:
-                                curr_array->type = String;
-                                break;
-                            
-                            default:
-                                break;
-                            }
-                        }
-
-                        idList = idList->PrevNode;
-                        passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
-                        TypeNode* currType = curr->typenode;
-                        symbolobj* currArray = passinobjTemp->data;
+                    while(currType->type->type != NULL){
+                        ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
+                        currArray = ((arraysymbolobj*)currArray)->data;
+                        currType = currType->type;
                         ((arraysymbolobj*)currArray)->start = currType->array_start;
                         ((arraysymbolobj*)currArray)->end = currType->array_end;
                         ((arraysymbolobj*)currArray)->type = Array;
-
-                        while(currType->type->type != NULL){
-                            ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
-                            currArray = ((arraysymbolobj*)currArray)->data;
-                            currType = currType->type;
-                            ((arraysymbolobj*)currArray)->start = currType->array_start;
-                            ((arraysymbolobj*)currArray)->end = currType->array_end;
-                            ((arraysymbolobj*)currArray)->type = Array;
-                        }
-                        currType = currType->type;
-                        ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
-                        currArray = ((arraysymbolobj*)currArray)->data;
-                        
-                        // 0: integer, 1: real, 2: string
-                        switch (currType->standtypenode->type)
-                        {
-                        case 0:
-                            /* code */
-                            currArray->type = Int;
-                            break;
-
-                        case 1:
-                            currArray->type = Real;
-                            break;
-
-                        case 2:
-                            currArray->type = String;
-                            break;
-                        
-                        default:
-                            break;
-                        }
-                        
                     }
+                    currType = currType->type;
+                    ((arraysymbolobj*)currArray)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                    currArray = ((arraysymbolobj*)currArray)->data;
+                    
+                    // 0: integer, 1: real, 2: string
+                    switch (currType->standtypenode->type)
+                    {
+                    case 0:
+                        /* code */
+                        currArray->type = Int;
+                        break;
 
+                    case 1:
+                        currArray->type = Real;
+                        break;
+
+                    case 2:
+                        currArray->type = String;
+                        break;
+                    
+                    default:
+                        break;
+                    }
+                    
                 }
 
-                curr = curr->NextNode;
             }
+
+            curr = curr->NextNode;
         }
     }
     

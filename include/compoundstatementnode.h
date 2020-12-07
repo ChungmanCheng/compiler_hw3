@@ -4,6 +4,8 @@
 #include "ast.h"
 #include "optionalstatementsnode.h"
 
+typedef struct optionalstatementsnode OptionalStatementSNode;
+
 typedef struct compoundstatementnode{
     Node node;
     OptionalStatementSNode* statements;

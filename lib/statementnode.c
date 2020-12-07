@@ -1,22 +1,5 @@
 #include "statementnode.h"
 
-#include "varnode.h"
-#include "expnode.h"
-#include "procedstatementnode.h"
-#include "compoundstatementnode.h"
-#include "statementnode.h"
-
-struct statementnode{
-    Node node;
-    int type;
-    VarNode* varnode;
-    ExpNode* expnode;
-    ProcedStatementNode* procedstatementnode;
-    CompoundStatementNode* compoundstatementnode;
-    StatementNode* statementnode1;
-    StatementNode* statementnode2;
-
-};
 
 Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varnode, ExpNode* expnode, ProcedStatementNode* procedstatementnode, CompoundStatementNode* compoundstatementnode, StatementNode* statementnode1, StatementNode* statementnode2, int lastLine, int lastColumn ){
     StatementNode* temp = (StatementNode*) malloc ( sizeof(StatementNode) );
@@ -38,6 +21,8 @@ Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varno
 }
 
 void StatementNode_visit(void* node){
+    StatementNode* temp = (StatementNode*) node;
+    
 
     return;
 }

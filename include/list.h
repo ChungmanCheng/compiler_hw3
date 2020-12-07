@@ -50,4 +50,8 @@ list* newfunclist( char*, int, returnType, dataType );
 
 void list_printTable( list* );
 
+int checkList( list*, char*, int, dataType );
+
+void listRemove( list*, int);
+
 #endif

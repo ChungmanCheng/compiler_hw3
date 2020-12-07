@@ -4,13 +4,15 @@
 #include "ast.h"
 #include "statementlistnode.h"
 
+typedef struct statementlistnode StatementlistNode;
+
 typedef struct optionalstatementsnode{
     Node node;
-    StatementListNode* statementlistnode;
+    StatementlistNode* statementlistnode;
 
 } OptionalStatementSNode;
 
-Node* newOptionalStatementSNode( int, int, StatementListNode*, int, int );
+Node* newOptionalStatementSNode( int, int, StatementlistNode*, int, int );
 
 void OptionalStatementSNode_visit(void*);
 
