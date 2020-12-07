@@ -1,5 +1,8 @@
 #include "statementnode.h"
+#include "list.h"
 
+extern list* listRoot;
+extern int scope;
 
 Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varnode, ExpNode* expnode, ProcedStatementNode* procedstatementnode, CompoundStatementNode* compoundstatementnode, StatementNode* statementnode1, StatementNode* statementnode2, int lastLine, int lastColumn ){
     StatementNode* temp = (StatementNode*) malloc ( sizeof(StatementNode) );
@@ -22,7 +25,59 @@ Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varno
 
 void StatementNode_visit(void* node){
     StatementNode* temp = (StatementNode*) node;
+
+    // store the node from symbol table
+    list* listTemp;
+    switch (temp->type)
+    {
+    case 0:
+    // variable ASSIGNMENT expression
+        if ( GetList( listRoot, listTemp, temp->varnode->id ) ){
+            // variable is declared
+
+            // check id tail
+            TailNode* tailTemp = temp->varnode->tailnode;
+            while(tailTemp != NULL){
+                tailTemp->expnode->node.visit(tailTemp->expnode);
+                tailTemp = tailTemp->tailnode;
+            }
+
+        }else{
+            // undeclared variables
+            fprintf(stderr, UNDEC_VAR, temp->varnode->node.loc.first_line, temp->varnode->node.loc.first_column, temp->varnode->id );
+        }
+        break;
+
+    case 1:
+    // procdure_statement
+        if ( GetList( listRoot, listTemp, temp->procedstatementnode->id ) ){
+            // variable is declared
+
+
+        }else{
+            // undeclared variables
+            fprintf(stderr, UNDEC_FUN, temp->procedstatementnode->node.loc.first_line, temp->procedstatementnode->node.loc.first_column, temp->procedstatementnode->id );
+        }
+        break;
     
+    case 2:
+    // compound_statement
+        temp->compoundstatementnode->node.visit(temp->compoundstatementnode);
+        break;
+
+    case 3:
+    // IF expression THEN statement ELSE statement
+
+        break;
+
+    case 4:
+    // WHILE expression DO statement
+
+        break;
+    
+    default:
+        break;
+    }
 
     return;
 }

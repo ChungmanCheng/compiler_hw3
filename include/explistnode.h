@@ -4,6 +4,8 @@
 #include "ast.h"
 #include "expnode.h"
 
+typedef struct expnode ExpNode;
+
 typedef struct explistnode{
     Node node;
     struct explistnode* explistnode;

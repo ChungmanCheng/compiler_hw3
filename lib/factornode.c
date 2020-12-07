@@ -1,20 +1,5 @@
 #include "factornode.h"
-#include "tailnode.h"
-#include "explistnode.h"
-#include "expnode.h"
-#include "numnode.h"
 
-struct factornode{
-    Node node;
-    int type;
-    char* id;
-    TailNode* tailnode;
-    ExpListNode* explistnode;
-    NumNode* num;
-    ExpNode* expnode;
-    struct factornode* factornode;
-    
-};
 
 Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, ExpListNode* explistnode, NumNode* numnode, ExpNode* expnode, FactorNode* factornode, int lastLine, int lastColumn ){
     FactorNode* temp = (FactorNode*) malloc ( sizeof(FactorNode) );
@@ -34,7 +19,48 @@ Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, ExpList
     return temp;
 }
 
-void FactorNode_visit(void* node){
+void* FactorNode_visit(void* node){
+    FactorNode* temp = (FactorNode*)node;
+    switch (temp->type)
+    {
+    case 0:
+        // IDENTIFIER tail
+
+        break;
+
+    case 1:
+        // IDENTIFIER LPAREN expression_list RPAREN
+
+        break;
+
+    case 2:
+        // num
+
+        break;
+    
+    case 3:
+        // LITERALSTR
+
+        break;
+
+    case 4:
+        // LPAREN expression RPAREN
+
+        break;
+
+    case 5:
+        // NOT factor
+
+        break;
+
+    case 6:
+        // SUBOP factor
+
+        break;
+    
+    default:
+        break;
+    }
 
     return;
 }

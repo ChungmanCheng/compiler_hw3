@@ -16,5 +16,28 @@ Node* newExpNode( int firstLine, int firstColumn, ExpNode* first, int op, ExpNod
 }
 
 void ExpNode_visit(void* node){
+    ExpNode* temp = (ExpNode*) node;
+    switch (temp->type)
+    {
+    case 0: 
+        temp->first->node.visit(temp->first);
+        break;
 
+    case 1:
+        temp->first->node.visit(temp->first);
+        // do something here
+        temp->least->node.visit(temp->least);
+        break;
+
+    case 2:
+        temp->first->node.visit(temp->first);
+        // do something here
+        temp->least->node.visit(temp->least);
+        break;
+    
+    default:
+        break;
+    }
+
+    return;
 }

@@ -5,6 +5,8 @@
 #include "expnode.h"
 #include "tailnode.h"
 
+typedef struct expnode ExpNode;
+
 typedef struct tailnode{
     Node node;
     ExpNode* expnode;

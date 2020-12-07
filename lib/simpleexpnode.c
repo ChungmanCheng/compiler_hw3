@@ -16,6 +16,16 @@ Node* newSimpleExpNode( int firstLine, int firstColumn, SimpleExpNode* simpleexp
 }
 
 void SimpleExpNode_visit(void* node){
+    SimpleExpNode* temp = (SimpleExpNode*) node;
+
+    if ( temp->simpleexpnode != 0 )
+        temp->simpleexpnode->node.visit(temp->simpleexpnode);
+
+    if ( temp->addnode != 0 )
+        temp->addnode->node.visit(temp->addnode);
+
+    if ( temp->termnode != 0 )
+        temp->termnode->node.visit(temp->termnode);
 
     return;
 }

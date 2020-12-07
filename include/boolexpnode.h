@@ -5,6 +5,8 @@
 #include "simpleexpnode.h"
 #include "relopnode.h"
 
+typedef struct simpleexpnode SimpleExpNode;
+
 typedef struct boolexpnode{
     Node node;
     SimpleExpNode* first;

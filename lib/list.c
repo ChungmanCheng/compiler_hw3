@@ -202,7 +202,7 @@ int checkList( list* root, char* id, int scope, dataType type ){
     return 0;
 }
 
-void listRemove( list* listRoot, int scope){
+void listRemove( list* listRoot, int scope ){
     list* curr = listRoot;
     while(curr != NULL){
         if ( curr->scope > scope ){
@@ -215,4 +215,16 @@ void listRemove( list* listRoot, int scope){
     }
     
     return;
+}
+
+int GetList( list* root, list* temp, char* id ){
+    list* curr = root;
+    while (curr != NULL){
+        if ( !strcmp(curr->id, id) ){
+            temp = curr;
+            return 1;
+        }
+        curr = curr->next;
+    }
+    return 0;
 }

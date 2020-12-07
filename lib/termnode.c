@@ -16,5 +16,16 @@ Node* newTermNode( int firstLine, int firstColumn, TermNode* termnode, MulNode* 
 }
 
 void TermNode_visit(void* node){
+    TermNode* temp = (TermNode*) node;
 
+    if (temp->termnode != 0)
+        temp->termnode->node.visit(temp->termnode);
+
+    if (temp->mulnode != 0)
+        temp->mulnode->node.visit(temp->mulnode);
+
+    if (temp->factornode != 0)
+        temp->factornode->node.visit(temp->factornode);
+
+    return;
 }

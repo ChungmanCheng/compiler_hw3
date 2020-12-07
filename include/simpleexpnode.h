@@ -6,10 +6,14 @@
 #include "addnode.h"
 #include "termnode.h"
 
+typedef struct termnode TermNode;
+typedef struct simpleexpnode SimpleExpNode;
+typedef struct addnode AddNode;
+
 typedef struct simpleexpnode{
     Node node;
     TermNode* termnode;
-    struct simpleexpnode* simpleexpnode;
+    SimpleExpNode* simpleexpnode;
     AddNode* addnode;
 
 } SimpleExpNode;

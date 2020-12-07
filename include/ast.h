@@ -15,7 +15,7 @@ typedef struct NodeTag{
 	NodeType type;
 	LocType  loc;
 	// I don't know what to do
-	void (*visit)(void*);
+	void* (*visit)(void*);
 } Node;
 
 /*

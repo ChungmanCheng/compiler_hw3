@@ -52,6 +52,8 @@ void list_printTable( list* );
 
 int checkList( list*, char*, int, dataType );
 
-void listRemove( list*, int);
+void listRemove( list*, int );
+
+int GetList( list* , list*, char* );
 
 #endif

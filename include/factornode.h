@@ -2,11 +2,29 @@
 #define _FACTORNODE_H
 
 #include "ast.h"
+#include "tailnode.h"
+#include "explistnode.h"
+#include "expnode.h"
+#include "numnode.h"
 
-typedef struct factornode FactorNode;
+typedef struct tailnode TailNode;
+typedef struct explistnode ExpListNode;
+typedef struct expnode ExpNode;
 
-// Node* newFactorNode( int, int, int, char*, ExpListNode*, NumNode*, ExpNode*, FactorNode*, int, int );
+typedef struct factornode{
+    Node node;
+    int type;
+    char* id;
+    TailNode* tailnode;
+    ExpListNode* explistnode;
+    NumNode* num;
+    ExpNode* expnode;
+    struct factornode* factornode;
+    
+} FactorNode;
 
-void FactorNode_visit(void*);
+Node* newFactorNode( int, int, int, char*, ExpListNode*, NumNode*, ExpNode*, FactorNode*, int, int );
+
+void* FactorNode_visit(void*);
 
 #endif

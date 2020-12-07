@@ -129,7 +129,7 @@ void SubDeclarNode_visit(void* node){
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data->type = typeTemp;
                 passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
                 if ( checkList(listRoot, idList->id, scope, Data) ){
-                    fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                    fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                 }else{
                     SHOW_NEWSYM(idList->id);
                     list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
@@ -142,7 +142,7 @@ void SubDeclarNode_visit(void* node){
                     passinobjTemp = (passinobj*)(passinobjTemp->next);
                     passinobjTemp->data->type = typeTemp;
                     if ( checkList(listRoot, idList->id, scope, Data) ){
-                        fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                        fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                     }else{
                         SHOW_NEWSYM(idList->id);
                         list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
@@ -199,7 +199,7 @@ void SubDeclarNode_visit(void* node){
                 passinobjTemp->next = NULL;
                 list* listTemp;
                 if ( checkList(listRoot, idList->id, scope, Data) ){
-                    fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                    fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                 }else{
                     SHOW_NEWSYM(idList->id);
                     listTemp = newarraylist(idList->id, scope, Array, Data);
@@ -244,7 +244,7 @@ void SubDeclarNode_visit(void* node){
                 while(idList->PrevNode != NULL){
                     
                     if ( checkList(listRoot, idList->id, scope, Data) ){
-                        fprintf(stderr, REDEF_VAR, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                        fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                     }else{
                         SHOW_NEWSYM(idList->id);
                         listTemp = newarraylist(idList->id, scope, Array, Data);

@@ -5,6 +5,8 @@
 #include "factornode.h"
 #include "mulnode.h"
 
+typedef struct factornode FactorNode;
+
 typedef struct termnode{
     Node node;
     struct termnode* termnode;
