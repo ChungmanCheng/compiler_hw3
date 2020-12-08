@@ -220,12 +220,15 @@ void listRemove( list* listRoot, int scope ){
 
 int GetList( list* root, list** temp, char* id ){
     list* curr = root;
+    if (curr != NULL)
+        while(curr->next != 0)
+            curr = curr->next;
     while (curr != NULL){
         if ( !strcmp(curr->id, id) ){
             *temp = curr;
             return 1;
         }
-        curr = curr->next;
+        curr = curr->prev;
     }
     return 0;
 }

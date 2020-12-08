@@ -26,22 +26,34 @@ void* VarNode_visit(void* node){
     symbolobj* currTemp = NULL;
 
     if ( GetList( listRoot, &listTemp, temp->id ) ){
-        if ( (listTemp->nodeType == Function) && ( ((funcsymbolobj*)listTemp->data)->check == 1 ) )
-            fprintf(stderr, ASSIG_TYPE, temp->node.loc.first_line, temp->node.loc.first_column);
+        // if ( (listTemp->nodeType == Function) && ( ((funcsymbolobj*)listTemp->data)->check == 1 ) )
+        //     fprintf(stderr, ASSIG_TYPE, temp->node.loc.first_line, temp->node.loc.first_column);
 
         currTemp = listTemp->data;
-        while (currTemp->type == Array){
-            currTemp = ((arraysymbolobj*)currTemp)->data;
-        }
         datatype = currTemp->type;
     }else{
         // undeclared variables
         fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
     }
+
+    TailNode* curr = temp->tailnode;
+    if (listTemp != 0)
+        while (curr != 0){
+            
+            curr = curr->tailnode;
+            if (currTemp->type == Array){
+                currTemp = ((arraysymbolobj*)currTemp)->data;
+            }else{
+                fprintf(stderr, INDEX_MANY, temp->node.loc.first_line, temp->node.loc.first_column, temp->id);
+                break;
+            }
+            datatype = currTemp->type;
+        }
     // check id tail
     if (temp->tailnode != 0){
         temp->tailnode->node.visit(temp->tailnode);
     }
+
 
 
     return datatype;

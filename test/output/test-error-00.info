@@ -4,7 +4,6 @@
 20:12: undeclared variable rrr
 21:13: undeclared function f
 32:3: redefined function addition
-36:9: type errors on assignment statement
 40:3: redefined function addition
 44:9: type errors on assignment statement
 52:9: undeclared variable sum
@@ -20,3 +19,4 @@
 83:30: type errors in arithmetic expressions +
 92:9: undeclared variable sum
 92:16: undeclared variable sum
+92:22: too many subscripten on a

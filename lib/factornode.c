@@ -13,9 +13,13 @@ int checkArguments(ExpListNode* listNode, symbolobj** curr, int num){
     }
 
     if ( ((passinobj*)*curr)->data->type == (int)listNode->expnode->node.visit(listNode->expnode) ){
-        *curr = ((passinobj*)*curr)->next;
+        if (((passinobj*)*curr) != 0)
+            *curr = ((passinobj*)*curr)->next;
+        else
+            return 1;
         if ( (num == 0) && ( ((passinobj*)*curr) != 0) )
             return 1;
+
         return 0;
     }
 
@@ -57,13 +61,23 @@ void* FactorNode_visit(void* node){
         // IDENTIFIER tail
         if ( GetList( listRoot, &listTemp, temp->id ) ){
             currTemp = listTemp->data;
-            while (currTemp->type == Array){
-                currTemp = ((arraysymbolobj*)currTemp)->data;
-            }
             datatype = currTemp->type;
         }else{
             fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
         }
+
+        TailNode* curr = temp->tailnode;
+        if (listTemp != 0)
+            while (curr != 0){
+                curr = curr->tailnode;
+                if (currTemp->type == Array){
+                    currTemp = ((arraysymbolobj*)currTemp)->data;
+                }else{
+                    fprintf(stderr, INDEX_MANY, temp->node.loc.first_line, temp->node.loc.first_column, temp->id);
+                    break;
+                }
+                datatype = currTemp->type;
+            }
 
         if (temp->tailnode != 0){
 

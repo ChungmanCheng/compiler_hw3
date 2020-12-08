@@ -30,6 +30,10 @@ void* SimpleExpNode_visit(void* node){
         temp1 = temp->simpleexpnode->node.visit(temp->simpleexpnode);
         temp->addnode->node.visit(temp->addnode);
         temp2 = temp->termnode->node.visit(temp->termnode);
+        
+        // debug
+        // fprintf(stderr, "test: %d %d\n", (int)temp1, (int)temp2);
+
         if ( ((int)temp1 >= 0) && ((int)temp2 >= 0) && ((int)temp1 != temp2) ){
             if (temp->addnode->positive)
                 fprintf(stderr, ARITH_TYPE, temp->addnode->node.loc.first_line, temp->addnode->node.loc.first_column, "+");

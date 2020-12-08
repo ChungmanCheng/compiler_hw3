@@ -1,8 +1,31 @@
+#include <stdio.h>
+
 #include "procedstatementnode.h"
 #include "list.h"
 
 extern list* listRoot;
 extern int scope;
+
+int checkProcedArguments(ExpListNode* listNode, symbolobj** curr, int num){
+    if (listNode->explistnode != 0){
+        if (checkArguments(listNode->explistnode, curr, num+1))
+            return 1;
+    }
+
+    if ( ((passinobj*)*curr)->data->type == (int)listNode->expnode->node.visit(listNode->expnode) ){
+        if (((passinobj*)*curr) != 0)
+            *curr = ((passinobj*)*curr)->next;
+        else
+            return 1;
+        if ( (num == 0) && ( ((passinobj*)*curr) != 0) )
+            return 1;
+
+        return 0;
+    }
+
+    return 1;
+
+}
 
 Node* newProcedStatementNode( int firstLine, int firstColumn, char* id, ExpListNode* explistnode, int lastLine, int lastColumn ){
     ProcedStatementNode* temp = (ProcedStatementNode*) malloc ( sizeof(ProcedStatementNode) );
@@ -28,6 +51,11 @@ void* ProcedStatementNode_visit(void* node){
     if ( GetList( listRoot, &listTemp, temp->id ) ){
         // variable is declared
 
+        // check arguments
+        symbolobj* tempnode = ((funcsymbolobj*)listTemp->data)->passInType;
+        if ( (tempnode != 0) && (temp->explistnode != 0) )
+            if ( checkProcedArguments( temp->explistnode, &tempnode, 0 ) )
+                fprintf(stderr, WRONG_ARGS, temp->node.loc.first_line, temp->node.loc.first_column, temp->id);
     }else{
         // undeclared variables
         fprintf(stderr, UNDEC_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
