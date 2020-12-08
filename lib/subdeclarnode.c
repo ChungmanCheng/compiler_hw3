@@ -7,6 +7,27 @@
 extern list* listRoot;
 extern int scope;
 
+int checkExist(StatementNode* curr, char* id){
+    if (curr != NULL){
+        if ( (curr->type == 0) ){
+            if ( !strcmp(id, curr->varnode->id) ){
+                return 1;
+            }
+        }else{
+            if (curr->statementnode1 != 0){
+                if (checkExist(curr->statementnode1, id))
+                    return 1;
+            }
+            if (curr->statementnode2 != 0){
+                if (checkExist(curr->statementnode2, id))
+                    return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 Node* newSubDeclarNode( int firstLine, int firstColumn, SubHeadNode* subheadnode, DeclarNode* declarnode, SubDeclarSNode* subdeclarsnode, CompoundStatementNode* compoundstatementnode, int lastLine, int lastColumn ){
     SubDeclarNode* temp = (SubDeclarNode*) malloc ( sizeof(SubDeclarNode) );
     temp->head = subheadnode;
@@ -68,14 +89,11 @@ void* SubDeclarNode_visit(void* node){
             if ( temp->compoundstatementnode->statements != NULL )
                 checkReturnType = temp->compoundstatementnode->statements->statementlistnode;
             while(checkReturnType != NULL){
-                if (checkReturnType->statementnode != NULL){
-                    if ( checkReturnType->statementnode->type == 0 ){
-                        if ( !strcmp(temp->head->id, checkReturnType->statementnode->varnode->id) ){
-                            check = 1;
-                            break;
-                        }
-                    }
-                }
+
+                check = checkExist(checkReturnType->statementnode, temp->head->id);
+                if (check)
+                    break;
+
                 checkReturnType = checkReturnType->nextList;
             }
             

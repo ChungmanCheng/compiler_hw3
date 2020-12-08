@@ -32,4 +32,6 @@ void* SubDeclarSNode_visit(void*);
 
 Node* newSubDeclarSNode( int, int, SubDeclarSNode*, SubDeclarNode*, int, int );
 
+int checkExist( StatementNode*, char* );
+
 #endif

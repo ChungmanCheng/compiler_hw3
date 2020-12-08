@@ -6,6 +6,22 @@
 extern list* listRoot;
 extern int scope;
 
+int checkArguments(ExpListNode* listNode, symbolobj** curr, int num){
+    if (listNode->explistnode != 0){
+        if (checkArguments(listNode->explistnode, curr, num+1))
+            return 1;
+    }
+
+    if ( ((passinobj*)*curr)->data->type == (int)listNode->expnode->node.visit(listNode->expnode) ){
+        *curr = ((passinobj*)*curr)->next;
+        if ( (num == 0) && ( ((passinobj*)*curr) != 0) )
+            return 1;
+        return 0;
+    }
+
+    return 1;
+}
+
 Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, TailNode* tailnode, ExpListNode* explistnode, NumNode* numnode, ExpNode* expnode, FactorNode* factornode, int lastLine, int lastColumn ){
     FactorNode* temp = (FactorNode*) malloc ( sizeof(FactorNode) );
     temp->type = type;
@@ -76,25 +92,36 @@ void* FactorNode_visit(void* node){
         if (temp->explistnode != 0)
             temp->explistnode->node.visit(temp->explistnode);
 
+        if (listTemp != 0){
+            // check arguments
+            symbolobj* tempnode = ((funcsymbolobj*)listTemp->data)->passInType;
+            if ( checkArguments( temp->explistnode, &tempnode, 0 ) )
+                fprintf(stderr, WRONG_ARGS, temp->node.loc.first_line, temp->node.loc.first_column, temp->id);
+            
+        }
+
         return datatype;
         break; 
 
     case 2:
         // num
+
+        // debug
+        // fprintf(stderr, "test: %d\n", temp->num->node.visit(temp->num));
+        
         return temp->num->node.visit(temp->num);
         break;
     
     case 3:
         // LITERALSTR
 
-        
         break;
 
     case 4:
         // LPAREN expression RPAREN
 
         if (temp->expnode != 0)
-            temp->expnode->node.visit(temp->expnode);
+            return temp->expnode->node.visit(temp->expnode);
         break;
 
     case 5:

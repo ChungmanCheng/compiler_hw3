@@ -24,6 +24,7 @@ void* SimpleExpNode_visit(void* node){
     // debug
     // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
     int* temp1, *temp2; 
+    int datatype = -1;
 
     if ( temp->addnode != 0 ){
         temp1 = temp->simpleexpnode->node.visit(temp->simpleexpnode);
@@ -34,10 +35,15 @@ void* SimpleExpNode_visit(void* node){
                 fprintf(stderr, ARITH_TYPE, temp->addnode->node.loc.first_line, temp->addnode->node.loc.first_column, "+");
             else
                 fprintf(stderr, ARITH_TYPE, temp->addnode->node.loc.first_line, temp->addnode->node.loc.first_column, "-");
+            
+        }
+        if ( ((int)temp1 >= 0) && ((int)temp2 >= 0) && ((int)temp1 == temp2) ){
+            datatype = (int)temp1;
+            return datatype;
         }
             
     }else{
         return temp->termnode->node.visit(temp->termnode);
     }
-    return -1;
+    return datatype;
 }
