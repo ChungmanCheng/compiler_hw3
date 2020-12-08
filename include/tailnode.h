@@ -16,6 +16,6 @@ typedef struct tailnode{
 
 Node* newTailNode( int, int, ExpNode*, TailNode*, int, int );
 
-void TailNode_visit(void*);
+void* TailNode_visit(void*);
 
 #endif

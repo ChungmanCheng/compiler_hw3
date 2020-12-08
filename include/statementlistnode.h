@@ -15,6 +15,6 @@ typedef struct statementlistnode{
 
 Node* newStatementListNode( int, int, struct statementlistnode*, StatementNode*, int, int );
 
-void StatementListNode_visit(void*);
+void* StatementListNode_visit(void*);
 
 #endif

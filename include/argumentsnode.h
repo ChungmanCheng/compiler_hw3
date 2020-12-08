@@ -12,6 +12,6 @@ typedef struct argumentsnode{
 
 Node* newArgumentsNode( int, int, ParameterListNode*, int, int );
 
-void ArgumentsNode_visit(void*);
+void* ArgumentsNode_visit(void*);
 
 #endif

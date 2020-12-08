@@ -16,6 +16,6 @@ typedef struct expnode{
 
 Node* newExpNode( int, int, ExpNode*, int, ExpNode*, int, int );
 
-void ExpNode_visit(void*);
+void* ExpNode_visit(void*);
 
 #endif

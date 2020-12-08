@@ -13,6 +13,7 @@ Node* newAddNode( int firstLine, int firstColumn, int positive, int lastLine, in
     return temp;
 }
 
-void AddNode_visit(void* node){
+void* AddNode_visit(void* node){
 
+    return 0;
 }

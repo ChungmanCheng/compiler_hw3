@@ -11,6 +11,6 @@ typedef struct relopnode{
 
 Node* newRelopNode( int, int, int, int, int );
 
-void RelopNode_visit(void*);
+void* RelopNode_visit(void*);
 
 #endif

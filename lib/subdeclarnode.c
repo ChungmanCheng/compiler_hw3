@@ -23,7 +23,7 @@ Node* newSubDeclarNode( int firstLine, int firstColumn, SubHeadNode* subheadnode
     return temp;
 };
 
-void SubDeclarNode_visit(void* node){
+void* SubDeclarNode_visit(void* node){
     SubDeclarNode* temp = (SubDeclarNode*) node;
 
     if (temp->head != NULL){
@@ -354,5 +354,5 @@ void SubDeclarNode_visit(void* node){
     scope--;
     listRemove(listRoot, scope);
     
-    return;
+    return 0;
 }

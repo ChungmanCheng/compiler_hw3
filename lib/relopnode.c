@@ -13,7 +13,7 @@ Node* newRelopNode( int firstLine, int firstColumn, int type, int lastLine, int 
     return temp;
 }
 
-void RelopNode_visit(void* node){
+void* RelopNode_visit(void* node){
 
-    return;
+    return 0;
 }

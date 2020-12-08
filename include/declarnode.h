@@ -15,6 +15,6 @@ typedef struct declarnode{
 
 Node* newDeclarNode( int, int, DeclarNode*, IdentListNode*, TypeNode*, int, int );
 
-void DeclarNode_visit(void*);
+void* DeclarNode_visit(void*);
 
 #endif

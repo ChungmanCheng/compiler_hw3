@@ -14,6 +14,6 @@ typedef struct optionalstatementsnode{
 
 Node* newOptionalStatementSNode( int, int, StatementlistNode*, int, int );
 
-void OptionalStatementSNode_visit(void*);
+void* OptionalStatementSNode_visit(void*);
 
 #endif

@@ -9,7 +9,7 @@
 
 Node* newProgNode( int firstLine, int firstColumn, char* id, IdentListNode* identlist, DeclarNode* declars, SubDeclarSNode* subdeclars, CompoundStatementNode* compoundstatement, int lastLine, int lastColumn );
 
-void ProgNode_visit();
+void* ProgNode_visit();
 
 typedef struct prognode{
     Node node;

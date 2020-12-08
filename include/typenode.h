@@ -13,7 +13,7 @@ typedef struct typenode{
     
 } TypeNode;
 
-void TypeNode_visit(void*);
+void* TypeNode_visit(void*);
 
 Node* newTypeNode( int, int, StandTypeNode*, int, int, TypeNode*, int, int );
 

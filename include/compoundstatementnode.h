@@ -12,7 +12,7 @@ typedef struct compoundstatementnode{
 
 } CompoundStatementNode;
 
-void CompoundStatementNode_visit(void*);
+void* CompoundStatementNode_visit(void*);
 
 Node* newCompoundStatementNode( int, int, OptionalStatementSNode*, int, int );
 

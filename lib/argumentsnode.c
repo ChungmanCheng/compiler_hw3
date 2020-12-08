@@ -13,7 +13,7 @@ Node* newArgumentsNode( int firstLine, int firstColumn, ParameterListNode* param
     return temp;
 }
 
-void ArgumentsNode_visit(void* node){
+void* ArgumentsNode_visit(void* node){
 
-    return;
+    return 0;
 }

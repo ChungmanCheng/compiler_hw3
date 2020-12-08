@@ -26,9 +26,9 @@ typedef struct subdeclarnode{
 
 Node* newSubDeclarNode( int, int, SubHeadNode*, DeclarNode*, SubDeclarSNode*, CompoundStatementNode*, int, int );
 
-void SubDeclarNode_visit(void*);
+void* SubDeclarNode_visit(void*);
 
-void SubDeclarSNode_visit(void*);
+void* SubDeclarSNode_visit(void*);
 
 Node* newSubDeclarSNode( int, int, SubDeclarSNode*, SubDeclarNode*, int, int );
 

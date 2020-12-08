@@ -1,8 +1,8 @@
 #include "typenode.h"
 
-void TypeNode_visit(void* node){
+void* TypeNode_visit(void* node){
 
-    return;
+    return 0;
 }
 
 Node* newTypeNode( int firstLine, int firstColumn, StandTypeNode* standtypenode, int array_start, int array_end, TypeNode* type, int lastLine, int lastColumn ){

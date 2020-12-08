@@ -12,6 +12,6 @@ typedef struct identlistnode{
 
 Node* newIdentListNode( int, int, char*, IdentListNode*, int, int );
 
-void IdentListNode_visit(void*);
+void* IdentListNode_visit(void*);
 
 #endif

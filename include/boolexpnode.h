@@ -17,6 +17,6 @@ typedef struct boolexpnode{
 
 Node* newBoolExpNode( int, int, SimpleExpNode*, RelopNode*, SimpleExpNode*, int, int );
 
-void BoolExpNode_visit(void*);
+void* BoolExpNode_visit(void*);
 
 #endif

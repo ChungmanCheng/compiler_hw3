@@ -20,7 +20,7 @@ Node* newDeclarNode( int firstLine, int firstColumn, DeclarNode* declarnode, Ide
     return temp;
 }
 
-void DeclarNode_visit(void* node){
+void* DeclarNode_visit(void* node){
     DeclarNode* temp = (DeclarNode*)node;
 
     // go to leftmost declarations
@@ -106,5 +106,5 @@ void DeclarNode_visit(void* node){
         curr = curr->PrevNode;
     }
 
-    return;
+    return 0;
 }

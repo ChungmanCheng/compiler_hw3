@@ -23,29 +23,25 @@ Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varno
     return temp;
 }
 
-void StatementNode_visit(void* node){
+void* StatementNode_visit(void* node){
     StatementNode* temp = (StatementNode*) node;
 
     // store the node from symbol table
     list* listTemp;
+    // counter for counting elements
+    int counter;
+
     switch (temp->type)
     {
     case 0:
     // variable ASSIGNMENT expression
-        if ( GetList( listRoot, listTemp, temp->varnode->id ) ){
-            // variable is declared
 
-            // check id tail
-            TailNode* tailTemp = temp->varnode->tailnode;
-            while(tailTemp != NULL){
-                tailTemp->expnode->node.visit(tailTemp->expnode);
-                tailTemp = tailTemp->tailnode;
-            }
+        // visit variable
+        temp->varnode->node.visit(temp->varnode);
+        
+        // visit expression
+        temp->expnode->node.visit(temp->expnode);
 
-        }else{
-            // undeclared variables
-            fprintf(stderr, UNDEC_VAR, temp->varnode->node.loc.first_line, temp->varnode->node.loc.first_column, temp->varnode->id );
-        }
         break;
 
     case 1:
@@ -79,5 +75,5 @@ void StatementNode_visit(void* node){
         break;
     }
 
-    return;
+    return 0;
 }

@@ -15,7 +15,7 @@ Node* newTermNode( int firstLine, int firstColumn, TermNode* termnode, MulNode* 
     return temp;
 }
 
-void TermNode_visit(void* node){
+void* TermNode_visit(void* node){
     TermNode* temp = (TermNode*) node;
 
     if (temp->termnode != 0)
@@ -27,5 +27,5 @@ void TermNode_visit(void* node){
     if (temp->factornode != 0)
         temp->factornode->node.visit(temp->factornode);
 
-    return;
+    return 0;
 }

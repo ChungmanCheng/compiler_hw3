@@ -15,7 +15,7 @@ Node* newBoolExpNode( int firstLine, int firstColumn, SimpleExpNode* first, Relo
     return temp;
 }
 
-void BoolExpNode_visit(void* node){
+void* BoolExpNode_visit(void* node){
     BoolExpNode* temp = (BoolExpNode*) node;
     if (temp->first != 0)
         temp->first->node.visit(temp->first);
@@ -26,5 +26,5 @@ void BoolExpNode_visit(void* node){
     if (temp->least != 0)
         temp->least->node.visit(temp->least);
 
-    return;
+    return 0;
 }

@@ -13,6 +13,6 @@ typedef struct numnode{
 
 Node* newNumNode( int, int, int, double, char*, int, int );
 
-void NumNode_visit(void*);
+void* NumNode_visit(void*);
 
 #endif

@@ -23,6 +23,6 @@ typedef struct statementnode{
 
 Node* newStatementNode( int, int, int, VarNode*, ExpNode*, ProcedStatementNode*, CompoundStatementNode*, StatementNode*, StatementNode*, int, int );
 
-void StatementNode_visit(void*);
+void* StatementNode_visit(void*);
 
 #endif

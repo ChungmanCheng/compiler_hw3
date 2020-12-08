@@ -14,11 +14,11 @@ Node* newOptionalStatementSNode( int firstLine, int firstColumn, StatementListNo
 }
 
 
-void OptionalStatementSNode_visit(void* node){
+void* OptionalStatementSNode_visit(void* node){
     OptionalStatementSNode* temp = (OptionalStatementSNode*) node;
     // printf("%d: %d OptionalStatementSNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
     temp->statementlistnode->node.visit(temp->statementlistnode);
 
-    return;
+    return 0;
 }
 

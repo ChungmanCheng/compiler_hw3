@@ -14,7 +14,7 @@ Node* newProcedStatementNode( int firstLine, int firstColumn, char* id, ExpListN
     return temp;
 }
 
-void ProcedStatementNode_visit(void* node){
+void* ProcedStatementNode_visit(void* node){
 
-    return;
+    return 0;
 }

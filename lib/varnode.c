@@ -1,4 +1,8 @@
 #include "varnode.h"
+#include "list.h"
+
+extern list* listRoot;
+extern int scope;
 
 Node* newVarNode( int firstLine, int firstColumn, char* id, TailNode* tailnode, int lastLine, int lastColumn ){
     VarNode* temp = (VarNode*) malloc ( sizeof(VarNode) );
@@ -14,7 +18,20 @@ Node* newVarNode( int firstLine, int firstColumn, char* id, TailNode* tailnode, 
     return temp;
 }
 
-void VarNode_visit(void* node){
+void* VarNode_visit(void* node){
+    VarNode* temp = (VarNode*) node;
+    
+    list* listTemp;
+    if ( GetList( listRoot, listTemp, temp->id ) ){
+        
+    }else{
+        // undeclared variables
+        fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
+    }
+    // check id tail
+    if (temp->tailnode != 0){
+        temp->tailnode->node.visit(temp->tailnode);
+    }
 
-    return;
+    return 0;
 }

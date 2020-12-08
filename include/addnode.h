@@ -11,6 +11,6 @@ typedef struct addnode{
 
 Node* newAddNode( int, int, int, int, int );
 
-void AddNode_visit(void*);
+void* AddNode_visit(void*);
 
 #endif

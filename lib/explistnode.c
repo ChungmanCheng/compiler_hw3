@@ -14,7 +14,7 @@ Node* newExpListNode( int firstLine, int firstColumn, ExpListNode* explistnode, 
     return temp;
 }
 
-void ExpListNode_visit(void* node){
+void* ExpListNode_visit(void* node){
 
-    return;
+    return 0;
 }

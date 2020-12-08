@@ -16,7 +16,7 @@ Node* newSubDeclarSNode( int firstLine, int firstColumn, SubDeclarSNode* prevnod
     return temp;
 }
 
-void SubDeclarSNode_visit(void* node){
+void* SubDeclarSNode_visit(void* node){
     SubDeclarSNode* temp = (SubDeclarSNode*) node;
     
     if(temp->PrevNode != NULL){
@@ -25,5 +25,5 @@ void SubDeclarSNode_visit(void* node){
     
     temp->NextNode->node.visit(temp->NextNode);
 
-    return;
+    return 0;
 }

@@ -8,7 +8,7 @@ typedef struct standtypenode{
     int type; // 0: integer, 1: real, 2: string
 } StandTypeNode;
 
-void StandTypeNode_visit(void*);
+void* StandTypeNode_visit(void*);
 
 Node* newStandTypeNode( int, int, int, int, int );
 

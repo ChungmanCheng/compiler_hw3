@@ -70,8 +70,8 @@ static void yyerror(const char *msg);
     Node* node;
 }
 
-%type <node> prog identifier_list declarations subprogram_declarations compound_statement type standard_type subprogram_declaration subprogram_head arguments parameter_list optinal_var optinal_statements statement_list statement variable tail procdure_statement expression_list expression boolexpression simple_expression term factor addop mulop relop num
-%type <text> IDENTIFIER SCIENTIFIC LITERALSTR LPAREN RPAREN SEMICOLON DOT COMMA COLON LBRACE RBRACE DOTDOT ASSIGNMENT ADDOP SUBOP MULOP DIVOP LTOP GTOP EQOP GETOP LETOP NEQOP
+%type <node> prog identifier_list declarations subprogram_declarations compound_statement type standard_type subprogram_declaration subprogram_head arguments parameter_list optinal_var optinal_statements statement_list statement variable tail procdure_statement expression_list expression boolexpression simple_expression term factor addop mulop relop num IDENTIFIER
+%type <text> SCIENTIFIC LITERALSTR LPAREN RPAREN SEMICOLON DOT COMMA COLON LBRACE RBRACE DOTDOT ASSIGNMENT ADDOP SUBOP MULOP DIVOP LTOP GTOP EQOP GETOP LETOP NEQOP
 %type <val> INTEGERNUM
 %type <dval> REALNUMBER
 

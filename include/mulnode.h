@@ -11,6 +11,6 @@ typedef struct MulNode{
 
 Node* newMulNode( int, int, int, int, int );
 
-void MulNode_visit(void*);
+void* MulNode_visit(void*);
 
 #endif

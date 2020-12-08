@@ -26,7 +26,7 @@ Node* newProgNode( int firstLine, int firstColumn, char* id, IdentListNode* iden
     return temp;
 };
 
-void ProgNode_visit(void* node){
+void* ProgNode_visit(void* node){
     // I don't know what to do
     ProgNode* temp = (ProgNode*)node;
 
@@ -53,5 +53,5 @@ void ProgNode_visit(void* node){
     list_printTable(listRoot);
     SHOW_SYMTAB_TAIL();
 
-    return;
+    return 0;
 }

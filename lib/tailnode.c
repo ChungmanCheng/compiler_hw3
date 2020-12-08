@@ -14,7 +14,14 @@ Node* newTailNode( int firstLine, int firstColumn, ExpNode* expnode, TailNode* t
     return temp;
 }
 
-void TailNode_visit(void* node){
+void* TailNode_visit(void* node){
+    TailNode* temp = (TailNode*) node;
 
-    return;
+    if (temp->expnode != 0)
+        temp->expnode->node.visit(temp->expnode);
+
+    if (temp->tailnode != 0)
+        temp->tailnode->node.visit(temp->tailnode);
+
+    return 0;
 }

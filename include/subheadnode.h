@@ -14,7 +14,7 @@ typedef struct subheadnode{
 
 } SubHeadNode;
 
-void SubHeadNode_visit(void*);
+void* SubHeadNode_visit(void*);
 
 Node* newSubHeadNode( int, int, int, char*, StandTypeNode*, ArgumentsNode*, int, int );
 

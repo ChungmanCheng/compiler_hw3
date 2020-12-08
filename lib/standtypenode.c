@@ -14,7 +14,7 @@ Node* newStandTypeNode( int firstLine, int firstColumn, int type, int lastLine, 
     return temp;
 }
 
-void StandTypeNode_visit(void* node){
+void* StandTypeNode_visit(void* node){
 
-    return;
+    return 0;
 }

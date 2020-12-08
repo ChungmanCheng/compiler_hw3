@@ -15,7 +15,7 @@ Node* newSimpleExpNode( int firstLine, int firstColumn, SimpleExpNode* simpleexp
     return temp;
 }
 
-void SimpleExpNode_visit(void* node){
+void* SimpleExpNode_visit(void* node){
     SimpleExpNode* temp = (SimpleExpNode*) node;
 
     if ( temp->simpleexpnode != 0 )
@@ -27,5 +27,5 @@ void SimpleExpNode_visit(void* node){
     if ( temp->termnode != 0 )
         temp->termnode->node.visit(temp->termnode);
 
-    return;
+    return 0;
 }

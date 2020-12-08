@@ -1,8 +1,8 @@
 #include "optionalvarnode.h"
 
-void OptionalVarNode_visit(void* node){
+void* OptionalVarNode_visit(void* node){
     
-    return;
+    return 0;
 }
 
 Node* newOptionalVarNode( int firstLine, int firstColumn ){

@@ -17,6 +17,6 @@ typedef struct parameterlistnode{
 
 Node* newParameterListNode( int, int, OptionalVarNode*, IdentListNode*, TypeNode*, ParameterListNode*, int, int );
 
-void ParameterListNode_visit(void*);
+void* ParameterListNode_visit(void*);
 
 #endif

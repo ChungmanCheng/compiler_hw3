@@ -20,7 +20,7 @@ Node* newSubHeadNode( int firstLine, int firstColumn, int type, char* id, StandT
     return temp;
 }
 
-void SubHeadNode_visit(void* node){
+void* SubHeadNode_visit(void* node){
 
-    return;
+    return 0;
 }
