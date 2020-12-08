@@ -25,7 +25,7 @@ void* ProcedStatementNode_visit(void* node){
     // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
 
     list* listTemp;
-    if ( GetList( listRoot, listTemp, temp->id ) ){
+    if ( GetList( listRoot, &listTemp, temp->id ) ){
         // variable is declared
 
     }else{
@@ -36,5 +36,5 @@ void* ProcedStatementNode_visit(void* node){
     if (temp->explistnode != 0)
         temp->explistnode->node.visit(temp->explistnode);
 
-    return 0;
+    return -1;
 }

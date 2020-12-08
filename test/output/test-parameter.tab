@@ -15,7 +15,7 @@ close a scope
 |c           |   1   |real                                            |
 |b           |   1   |int                                             |
 |a           |   1   |int                                             |
-|ss          |   0   |void (real)                                     |
+|ss          |   0   |void (int, int, real)                           |
 |c           |   0   |real                                            |
 |b           |   0   |int                                             |
 |a           |   0   |int                                             |
@@ -28,7 +28,7 @@ close a scope
 |    Name    | Scope |                   Type                         |
 -----------------------------------------------------------------------
 |tt          |   0   |int                                             |
-|ss          |   0   |void (real)                                     |
+|ss          |   0   |void (int, int, real)                           |
 |c           |   0   |real                                            |
 |b           |   0   |int                                             |
 |a           |   0   |int                                             |
@@ -39,7 +39,7 @@ close a scope
 |    Name    | Scope |                   Type                         |
 -----------------------------------------------------------------------
 |tt          |   0   |int                                             |
-|ss          |   0   |void (real)                                     |
+|ss          |   0   |void (int, int, real)                           |
 |c           |   0   |real                                            |
 |b           |   0   |int                                             |
 |a           |   0   |int                                             |

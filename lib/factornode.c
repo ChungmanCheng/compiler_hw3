@@ -30,14 +30,21 @@ void* FactorNode_visit(void* node){
 
     // debug
     // fprintf(stderr, "%d: %d has an FactorNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
+    
+    int datatype = -1;
+    list* listTemp = NULL;
+    symbolobj* currTemp = NULL;
 
-    list* listTemp;
     switch (temp->type)
     {
     case 0:
         // IDENTIFIER tail
-        if ( GetList( listRoot, listTemp, temp->id ) ){
-
+        if ( GetList( listRoot, &listTemp, temp->id ) ){
+            currTemp = listTemp->data;
+            while (currTemp->type == Array){
+                currTemp = ((arraysymbolobj*)currTemp)->data;
+            }
+            datatype = currTemp->type;
         }else{
             fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
         }
@@ -49,14 +56,19 @@ void* FactorNode_visit(void* node){
 
             temp->tailnode->node.visit(temp->tailnode);
         }
-            
+
+        return datatype;
         break;
 
     case 1:
         // IDENTIFIER LPAREN expression_list RPAREN
 
-        if ( GetList( listRoot, listTemp, temp->id ) ){
-
+        if ( GetList( listRoot, &listTemp, temp->id ) ){
+            currTemp = listTemp->data;
+            while (currTemp->type == Array){
+                currTemp = ((arraysymbolobj*)currTemp)->data;
+            }
+            datatype = currTemp->type;
         }else{
             fprintf(stderr, UNDEC_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
         }
@@ -64,12 +76,12 @@ void* FactorNode_visit(void* node){
         if (temp->explistnode != 0)
             temp->explistnode->node.visit(temp->explistnode);
 
-        break;
+        return datatype;
+        break; 
 
     case 2:
         // num
-
-        temp->num->node.visit(temp->num);
+        return temp->num->node.visit(temp->num);
         break;
     
     case 3:
@@ -103,5 +115,5 @@ void* FactorNode_visit(void* node){
         break;
     }
 
-    return 0;
+    return -1;
 }

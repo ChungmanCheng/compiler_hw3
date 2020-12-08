@@ -26,7 +26,7 @@ void* ExpNode_visit(void* node){
     switch (temp->type)
     {
     case 0: 
-        temp->first->node.visit(temp->first);
+        return temp->first->node.visit(temp->first);
         break;
 
     case 1:
@@ -45,5 +45,5 @@ void* ExpNode_visit(void* node){
         break;
     }
 
-    return 0;
+    return -1;
 }

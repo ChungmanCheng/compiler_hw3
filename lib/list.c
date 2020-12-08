@@ -43,6 +43,7 @@ list* newfunclist( char* id, int scope, returnType type, dataType nodetype ){
     temp->data = (symbolobj*) malloc ( sizeof(funcsymbolobj) );
     temp->data->type = type;
     ((funcsymbolobj*)temp->data)->passInType = NULL;
+    ((funcsymbolobj*)temp->data)->check = 0;
     temp->id = id;
     temp->scope = scope;
     temp->nodeType = nodetype;
@@ -217,11 +218,11 @@ void listRemove( list* listRoot, int scope ){
     return;
 }
 
-int GetList( list* root, list* temp, char* id ){
+int GetList( list* root, list** temp, char* id ){
     list* curr = root;
     while (curr != NULL){
         if ( !strcmp(curr->id, id) ){
-            temp = curr;
+            *temp = curr;
             return 1;
         }
         curr = curr->next;

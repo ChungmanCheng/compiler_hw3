@@ -26,5 +26,5 @@ void* TailNode_visit(void* node){
     if (temp->tailnode != 0)
         temp->tailnode->node.visit(temp->tailnode);
 
-    return 0;
+    return -1;
 }

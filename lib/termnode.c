@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "termnode.h"
+#include "list.h"
 
 Node* newTermNode( int firstLine, int firstColumn, TermNode* termnode, MulNode* mulnode, FactorNode* factornode, int lastLine, int lastColumn ){
     TermNode* temp = (TermNode*) malloc ( sizeof(TermNode) );
@@ -23,14 +24,22 @@ void* TermNode_visit(void* node){
     // debug
     // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
 
-    if (temp->termnode != 0)
-        temp->termnode->node.visit(temp->termnode);
+    int* temp1, *temp2;
 
-    if (temp->mulnode != 0)
+    if (temp->mulnode != 0){
+        temp1 = temp->termnode->node.visit(temp->termnode);
         temp->mulnode->node.visit(temp->mulnode);
+        temp2 = temp->factornode->node.visit(temp->factornode);
 
-    if (temp->factornode != 0)
-        temp->factornode->node.visit(temp->factornode);
+        if ( ((int)temp1 >= 0) && ((int)temp2 >= 0) && ((int)temp1 != temp2) ){
+            if (temp->mulnode->type)
+                fprintf(stderr, ARITH_TYPE, temp->mulnode->node.loc.first_line, temp->mulnode->node.loc.first_column, "/");
+            else
+                fprintf(stderr, ARITH_TYPE, temp->mulnode->node.loc.first_line, temp->mulnode->node.loc.first_column, "*");
+        }
+    }else{
+        return temp->factornode->node.visit(temp->factornode);
+    }
 
-    return 0;
+    return -1;
 }

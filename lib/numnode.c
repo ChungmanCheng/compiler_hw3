@@ -20,6 +20,27 @@ Node* newNumNode( int firstLine, int firstColumn, int type, double num, char* st
 };
 
 void* NumNode_visit(void* node){
+    NumNode* temp = (NumNode*) node;
 
-    return 0;
+    switch (temp->type)
+    {
+    case 0:
+        // REALNUMBER
+        return 2;
+        break;
+
+    case 1:
+        // INTERGERNUM
+        return 0;
+        break;
+
+    case 2:
+        // SCIENTIFIC
+        break;
+    
+    default:
+        break;
+    }
+
+    return -1;
 }

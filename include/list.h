@@ -29,6 +29,7 @@ typedef struct PassInObj{
 typedef struct FuncSymbolObj{
     returnType type;
     symbolobj* passInType;
+    int check;
 } funcsymbolobj;
 
 typedef struct List{
@@ -54,6 +55,6 @@ int checkList( list*, char*, int, dataType );
 
 void listRemove( list*, int );
 
-int GetList( list* , list*, char* );
+int GetList( list* , list**, char* );
 
 #endif

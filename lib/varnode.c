@@ -21,9 +21,19 @@ Node* newVarNode( int firstLine, int firstColumn, char* id, TailNode* tailnode, 
 void* VarNode_visit(void* node){
     VarNode* temp = (VarNode*) node;
     
-    list* listTemp;
-    if ( GetList( listRoot, listTemp, temp->id ) ){
-        
+    list* listTemp = NULL;
+    int datatype = -1;
+    symbolobj* currTemp = NULL;
+
+    if ( GetList( listRoot, &listTemp, temp->id ) ){
+        if ( (listTemp->nodeType == Function) && ( ((funcsymbolobj*)listTemp->data)->check == 1 ) )
+            fprintf(stderr, ASSIG_TYPE, temp->node.loc.first_line, temp->node.loc.first_column);
+
+        currTemp = listTemp->data;
+        while (currTemp->type == Array){
+            currTemp = ((arraysymbolobj*)currTemp)->data;
+        }
+        datatype = currTemp->type;
     }else{
         // undeclared variables
         fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
@@ -33,5 +43,6 @@ void* VarNode_visit(void* node){
         temp->tailnode->node.visit(temp->tailnode);
     }
 
-    return 0;
+
+    return datatype;
 }

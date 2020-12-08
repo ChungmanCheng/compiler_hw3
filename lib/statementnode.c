@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "statementnode.h"
 #include "list.h"
 
@@ -33,6 +35,8 @@ void* StatementNode_visit(void* node){
     list* listTemp;
     // counter for counting elements
     int counter;
+    // store data type
+    int* temp1, *temp2;
 
     switch (temp->type)
     {
@@ -40,10 +44,17 @@ void* StatementNode_visit(void* node){
     // variable ASSIGNMENT expression
 
         // visit variable
-        temp->varnode->node.visit(temp->varnode);
-        
+        temp1 = (int*) temp->varnode->node.visit(temp->varnode);
+
         // visit expression
-        temp->expnode->node.visit(temp->expnode);
+        temp2 = (int*) temp->expnode->node.visit(temp->expnode);
+
+        // debug
+        // fprintf(stderr, "Data Type: %d\n", temp1);
+        // fprintf(stderr, "Data Type: %d\n", temp2);
+
+        if ( ((int)temp1 >= 0) && ((int)temp2 >= 0) && ((int)temp1 != temp2) )
+            fprintf(stderr, ASSIG_TYPE, temp->varnode->node.loc.first_line, temp->varnode->node.loc.first_column);
 
         break;
 

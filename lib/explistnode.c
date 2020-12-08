@@ -23,5 +23,5 @@ void* ExpListNode_visit(void* node){
     if (temp->expnode != 0)
         temp->expnode->node.visit(temp->expnode);
 
-    return 0;
+    return -1;
 }

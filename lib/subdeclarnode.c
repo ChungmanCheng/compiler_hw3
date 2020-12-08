@@ -97,20 +97,16 @@ void* SubDeclarNode_visit(void* node){
 
         // pass in data type
         ParameterListNode* curr = NULL;
+        passinobj* passinobjTemp = NULL;
 
-        
+
         if (temp->head->arguments != NULL)
             curr = temp->head->arguments->parameterlist;
 
         if (curr != 0){
             // initialize the funcList
 
-            ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
-        }
-
-        while(curr != NULL){
-            // parameterList
-
+            ((funcsymbolobj*)tempList->data)->passInType = (symbolobj*) malloc ( sizeof(passinobj) );
             // add pass in data type
             returnType typeTemp;
             if (curr->typenode->standtypenode != NULL){
@@ -135,7 +131,7 @@ void* SubDeclarNode_visit(void* node){
                 IdentListNode* idList = curr->identlistnode;
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data->type = typeTemp;
-                passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
                 if ( checkList(listRoot, idList->id, scope, Data) ){
                     fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
                 }else{
@@ -167,7 +163,7 @@ void* SubDeclarNode_visit(void* node){
                 ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->start = curr->typenode->array_start;
                 ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->end = curr->typenode->array_end;
 
-                passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
+                passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
                 TypeNode* currType = curr->typenode;
                 symbolobj* currArray = passinobjTemp->data;
 
@@ -337,8 +333,60 @@ void* SubDeclarNode_visit(void* node){
 
             }
 
-            curr = curr->NextNode;
+            // continue passing argument
+            while(curr->NextNode != NULL){
+                curr = curr->NextNode;
+                // parameterList
+
+                // add pass in data type
+                returnType typeTemp;
+                if (curr->typenode->standtypenode != NULL){
+                    // standtype
+                    switch(curr->typenode->standtypenode->type){
+                    case 0:
+                        typeTemp = Int;
+                        break;
+
+                    case 1:
+                        typeTemp = Real;
+                        break;
+
+                    case 2:
+                        typeTemp = String;
+                        break;
+
+                    default:
+                        break;
+                    }
+
+                    IdentListNode* idList = curr->identlistnode;
+                    passinobjTemp->next = NULL;
+                    while( idList != NULL ){
+                        passinobjTemp->next = (symbolobj*) malloc ( sizeof(passinobj) );
+                        ((passinobj*)passinobjTemp->next)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
+                        ((passinobj*)passinobjTemp->next)->data->type = typeTemp;
+                        if ( checkList(listRoot, idList->id, scope, Data) ){
+                            fprintf(stderr, REDEF_ARG, idList->node.loc.first_line, idList->node.loc.first_column, idList->id );
+                        }else{
+                            SHOW_NEWSYM(idList->id);
+                            list_push_back( listRoot, newdatalist(idList->id, scope, typeTemp, Data) );
+                        }
+                        idList = idList->PrevNode;
+                        passinobjTemp = (passinobj*)(passinobjTemp->next);
+                    }
+
+                }
+                else{
+                    // array
+                    
+                    // do something
+
+                }
+
+            }
+
         }
+        
     }
     
     if (temp->declarnode != NULL){
@@ -352,6 +400,10 @@ void* SubDeclarNode_visit(void* node){
     if (temp->compoundstatementnode != NULL){
         temp->compoundstatementnode->node.visit(temp->compoundstatementnode);
     }
+
+    list* listTemp;
+    if ( GetList(listRoot, &listTemp, temp->head->id) )
+        ((funcsymbolobj*)listTemp->data)->check = 1;
 
     SHOW_CLSSCP();
     SHOW_SYMTAB_HEAD();

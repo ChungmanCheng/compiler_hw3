@@ -19,6 +19,6 @@ void* OptionalStatementSNode_visit(void* node){
     // printf("%d: %d OptionalStatementSNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
     temp->statementlistnode->node.visit(temp->statementlistnode);
 
-    return 0;
+    return -1;
 }
 
