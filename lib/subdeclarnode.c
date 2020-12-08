@@ -97,8 +97,17 @@ void* SubDeclarNode_visit(void* node){
 
         // pass in data type
         ParameterListNode* curr = NULL;
+
+        
         if (temp->head->arguments != NULL)
             curr = temp->head->arguments->parameterlist;
+
+        if (curr != 0){
+            // initialize the funcList
+
+            ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
+        }
+
         while(curr != NULL){
             // parameterList
 
@@ -124,7 +133,6 @@ void* SubDeclarNode_visit(void* node){
                 }
 
                 IdentListNode* idList = curr->identlistnode;
-                ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(symbolobj) );
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data->type = typeTemp;
                 passinobj* passinobjTemp = ((funcsymbolobj*)tempList->data)->passInType;
@@ -154,7 +162,6 @@ void* SubDeclarNode_visit(void* node){
                 
                 IdentListNode* idList = curr->identlistnode;
 
-                ((funcsymbolobj*)tempList->data)->passInType = (passinobj*) malloc ( sizeof(passinobj) );
                 ((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data = (symbolobj*) malloc ( sizeof(arraysymbolobj) );
                 ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->type = Array;
                 ((arraysymbolobj*)((passinobj*)((funcsymbolobj*)tempList->data)->passInType)->data)->start = curr->typenode->array_start;

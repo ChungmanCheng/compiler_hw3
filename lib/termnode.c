@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "termnode.h"
 
 Node* newTermNode( int firstLine, int firstColumn, TermNode* termnode, MulNode* mulnode, FactorNode* factornode, int lastLine, int lastColumn ){
@@ -17,6 +19,9 @@ Node* newTermNode( int firstLine, int firstColumn, TermNode* termnode, MulNode* 
 
 void* TermNode_visit(void* node){
     TermNode* temp = (TermNode*) node;
+
+    // debug
+    // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
 
     if (temp->termnode != 0)
         temp->termnode->node.visit(temp->termnode);

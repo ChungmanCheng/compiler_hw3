@@ -17,6 +17,9 @@ Node* newTailNode( int firstLine, int firstColumn, ExpNode* expnode, TailNode* t
 void* TailNode_visit(void* node){
     TailNode* temp = (TailNode*) node;
 
+    // debug
+    // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
+
     if (temp->expnode != 0)
         temp->expnode->node.visit(temp->expnode);
 

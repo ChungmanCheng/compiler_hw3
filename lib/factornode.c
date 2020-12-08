@@ -1,13 +1,16 @@
+#include <stdio.h>
+
 #include "factornode.h"
 #include "list.h"
 
 extern list* listRoot;
 extern int scope;
 
-Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, ExpListNode* explistnode, NumNode* numnode, ExpNode* expnode, FactorNode* factornode, int lastLine, int lastColumn ){
+Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, TailNode* tailnode, ExpListNode* explistnode, NumNode* numnode, ExpNode* expnode, FactorNode* factornode, int lastLine, int lastColumn ){
     FactorNode* temp = (FactorNode*) malloc ( sizeof(FactorNode) );
     temp->type = type;
     temp->id = id;
+    temp->tailnode = tailnode;
     temp->explistnode = explistnode;
     temp->num = numnode;
     temp->expnode = expnode;
@@ -24,30 +27,40 @@ Node* newFactorNode( int firstLine, int firstColumn, int type, char* id, ExpList
 
 void* FactorNode_visit(void* node){
     FactorNode* temp = (FactorNode*)node;
+
+    // debug
+    // fprintf(stderr, "%d: %d has an FactorNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
+
+    list* listTemp;
     switch (temp->type)
     {
     case 0:
         // IDENTIFIER tail
-
-        if ( checkList(listRoot, temp->id, scope, Data) ){
+        if ( GetList( listRoot, listTemp, temp->id ) ){
 
         }else{
             fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
         }
 
-        if (temp->tailnode != 0)
+        if (temp->tailnode != 0){
+
+            // debug
+            // fprintf(stderr, "%d: %d has an Node\n", temp->tailnode->node.loc.first_line, temp->tailnode->node.loc.first_column);
+
             temp->tailnode->node.visit(temp->tailnode);
+        }
+            
         break;
 
     case 1:
         // IDENTIFIER LPAREN expression_list RPAREN
 
-        if ( checkList(listRoot, temp->id, scope, Data) ){
+        if ( GetList( listRoot, listTemp, temp->id ) ){
 
         }else{
-            fprintf(stderr, UNDEC_VAR, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
+            fprintf(stderr, UNDEC_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->id );
         }
-        
+
         if (temp->explistnode != 0)
             temp->explistnode->node.visit(temp->explistnode);
 

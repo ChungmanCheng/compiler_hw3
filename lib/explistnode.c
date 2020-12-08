@@ -15,6 +15,13 @@ Node* newExpListNode( int firstLine, int firstColumn, ExpListNode* explistnode, 
 }
 
 void* ExpListNode_visit(void* node){
+    ExpListNode* temp = (ExpListNode*) node;
+
+    if (temp->explistnode != 0)
+        temp->explistnode->node.visit(temp->explistnode);
+
+    if (temp->expnode != 0)
+        temp->expnode->node.visit(temp->expnode);
 
     return 0;
 }

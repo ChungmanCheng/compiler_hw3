@@ -17,6 +17,7 @@ Node* newBoolExpNode( int firstLine, int firstColumn, SimpleExpNode* first, Relo
 
 void* BoolExpNode_visit(void* node){
     BoolExpNode* temp = (BoolExpNode*) node;
+    
     if (temp->first != 0)
         temp->first->node.visit(temp->first);
 

@@ -26,6 +26,9 @@ Node* newStatementNode( int firstLine, int firstColumn, int type, VarNode* varno
 void* StatementNode_visit(void* node){
     StatementNode* temp = (StatementNode*) node;
 
+    // debug
+    // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
+
     // store the node from symbol table
     list* listTemp;
     // counter for counting elements
@@ -46,28 +49,38 @@ void* StatementNode_visit(void* node){
 
     case 1:
     // procdure_statement
-        if ( GetList( listRoot, listTemp, temp->procedstatementnode->id ) ){
-            // variable is declared
-
-
-        }else{
-            // undeclared variables
-            fprintf(stderr, UNDEC_FUN, temp->procedstatementnode->node.loc.first_line, temp->procedstatementnode->node.loc.first_column, temp->procedstatementnode->id );
-        }
+        
+        temp->procedstatementnode->node.visit(temp->procedstatementnode);
         break;
     
     case 2:
     // compound_statement
+        
         temp->compoundstatementnode->node.visit(temp->compoundstatementnode);
         break;
 
     case 3:
     // IF expression THEN statement ELSE statement
+        
+        if (temp->expnode != 0)
+            temp->expnode->node.visit(temp->expnode);
+
+        if (temp->statementnode1 != 0)
+            temp->statementnode1->node.visit(temp->statementnode1);
+
+        if (temp->statementnode2 != 0)
+            temp->statementnode2->node.visit(temp->statementnode2);
 
         break;
 
     case 4:
     // WHILE expression DO statement
+        
+        if (temp->expnode != 0)
+            temp->expnode->node.visit(temp->expnode);
+
+        if (temp->statementnode1 != 0)
+            temp->statementnode1->node.visit(temp->statementnode1);
 
         break;
     

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "expnode.h"
 
 Node* newExpNode( int firstLine, int firstColumn, ExpNode* first, int op, ExpNode* least, int lastLine, int lastColumn ){
@@ -17,6 +19,10 @@ Node* newExpNode( int firstLine, int firstColumn, ExpNode* first, int op, ExpNod
 
 void* ExpNode_visit(void* node){
     ExpNode* temp = (ExpNode*) node;
+    
+    // debug
+    // fprintf(stderr, "%d: %d has an ExpNode\n", temp->node.loc.first_line, temp->node.loc.first_column);
+
     switch (temp->type)
     {
     case 0: 

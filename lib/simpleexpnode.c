@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "simpleexpnode.h"
 
 Node* newSimpleExpNode( int firstLine, int firstColumn, SimpleExpNode* simpleexpnode, AddNode* addnode, TermNode* termnode, int lastLine, int lastColumn ){
@@ -17,6 +19,9 @@ Node* newSimpleExpNode( int firstLine, int firstColumn, SimpleExpNode* simpleexp
 
 void* SimpleExpNode_visit(void* node){
     SimpleExpNode* temp = (SimpleExpNode*) node;
+
+    // debug
+    // fprintf(stderr, "%d: %d has an Node\n", temp->node.loc.first_line, temp->node.loc.first_column);
 
     if ( temp->simpleexpnode != 0 )
         temp->simpleexpnode->node.visit(temp->simpleexpnode);

@@ -1659,43 +1659,43 @@ yyreduce:
 
   case 50: /* factor: IDENTIFIER tail  */
 #line 189 "parser.y"
-                        { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 0, (yyvsp[-1].node), NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                        { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 0, (yyvsp[-1].node), (yyvsp[0].node), NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1664 "obj/parser.c"
     break;
 
   case 51: /* factor: IDENTIFIER LPAREN expression_list RPAREN  */
 #line 190 "parser.y"
-                                               { (yyval.node) = newFactorNode( (yylsp[-3]).first_line, (yylsp[-3]).first_column, 1, (yyvsp[-3].node), (yyvsp[-1].node), NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                                               { (yyval.node) = newFactorNode( (yylsp[-3]).first_line, (yylsp[-3]).first_column, 1, (yyvsp[-3].node), NULL, (yyvsp[-1].node), NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1670 "obj/parser.c"
     break;
 
   case 52: /* factor: num  */
 #line 191 "parser.y"
-          { (yyval.node) = newFactorNode( (yylsp[0]).first_line, (yylsp[0]).first_column, 2, NULL, NULL, (yyvsp[0].node), NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+          { (yyval.node) = newFactorNode( (yylsp[0]).first_line, (yylsp[0]).first_column, 2, NULL, NULL, NULL, (yyvsp[0].node), NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1676 "obj/parser.c"
     break;
 
   case 53: /* factor: LITERALSTR  */
 #line 192 "parser.y"
-                 { (yyval.node) = newFactorNode( (yylsp[0]).first_line, (yylsp[0]).first_column, 3, (yyvsp[0].text), NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                 { (yyval.node) = newFactorNode( (yylsp[0]).first_line, (yylsp[0]).first_column, 3, (yyvsp[0].text), NULL, NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1682 "obj/parser.c"
     break;
 
   case 54: /* factor: LPAREN expression RPAREN  */
 #line 193 "parser.y"
-                               { (yyval.node) = newFactorNode( (yylsp[-2]).first_line, (yylsp[-2]).first_column, 4, NULL, NULL, NULL, (yyvsp[-1].node), NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                               { (yyval.node) = newFactorNode( (yylsp[-2]).first_line, (yylsp[-2]).first_column, 4, NULL, NULL, NULL, NULL, (yyvsp[-1].node), NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1688 "obj/parser.c"
     break;
 
   case 55: /* factor: NOT factor  */
 #line 194 "parser.y"
-                 { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 5, NULL, NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                 { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 5, NULL, NULL, NULL, NULL, NULL, NULL, (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1694 "obj/parser.c"
     break;
 
   case 56: /* factor: SUBOP factor  */
 #line 195 "parser.y"
-                   { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 6, NULL, NULL, NULL, NULL, (yyvsp[0].node), (yylsp[0]).first_line, (yylsp[0]).first_column ); }
+                   { (yyval.node) = newFactorNode( (yylsp[-1]).first_line, (yylsp[-1]).first_column, 6, NULL, NULL, NULL, NULL, NULL, (yyvsp[0].node), (yylsp[0]).first_line, (yylsp[0]).first_column ); }
 #line 1700 "obj/parser.c"
     break;
 

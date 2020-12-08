@@ -186,13 +186,13 @@ term: factor { $$ = newTermNode( @1.first_line, @1.first_column, NULL, NULL, $1,
     | term mulop factor { $$ = newTermNode( @1.first_line, @1.first_column, $1, $2, $3, @3.first_line, @3.first_column ); }
     ;
 
-factor: IDENTIFIER tail { $$ = newFactorNode( @1.first_line, @1.first_column, 0, $1, NULL, NULL, NULL, NULL, @2.first_line, @2.first_column ); }
-    | IDENTIFIER LPAREN expression_list RPAREN { $$ = newFactorNode( @1.first_line, @1.first_column, 1, $1, $3, NULL, NULL, NULL, @4.first_line, @4.first_column ); }
-    | num { $$ = newFactorNode( @1.first_line, @1.first_column, 2, NULL, NULL, $1, NULL, NULL, @1.first_line, @1.first_column ); }
-    | LITERALSTR { $$ = newFactorNode( @1.first_line, @1.first_column, 3, $1, NULL, NULL, NULL, NULL, @1.first_line, @1.first_column ); }
-    | LPAREN expression RPAREN { $$ = newFactorNode( @1.first_line, @1.first_column, 4, NULL, NULL, NULL, $2, NULL, @3.first_line, @3.first_column ); }
-    | NOT factor { $$ = newFactorNode( @1.first_line, @1.first_column, 5, NULL, NULL, NULL, NULL, NULL, @2.first_line, @2.first_column ); }
-    | SUBOP factor { $$ = newFactorNode( @1.first_line, @1.first_column, 6, NULL, NULL, NULL, NULL, $2, @2.first_line, @2.first_column ); }
+factor: IDENTIFIER tail { $$ = newFactorNode( @1.first_line, @1.first_column, 0, $1, $2, NULL, NULL, NULL, NULL, @2.first_line, @2.first_column ); }
+    | IDENTIFIER LPAREN expression_list RPAREN { $$ = newFactorNode( @1.first_line, @1.first_column, 1, $1, NULL, $3, NULL, NULL, NULL, @4.first_line, @4.first_column ); }
+    | num { $$ = newFactorNode( @1.first_line, @1.first_column, 2, NULL, NULL, NULL, $1, NULL, NULL, @1.first_line, @1.first_column ); }
+    | LITERALSTR { $$ = newFactorNode( @1.first_line, @1.first_column, 3, $1, NULL, NULL, NULL, NULL, NULL, @1.first_line, @1.first_column ); }
+    | LPAREN expression RPAREN { $$ = newFactorNode( @1.first_line, @1.first_column, 4, NULL, NULL, NULL, NULL, $2, NULL, @3.first_line, @3.first_column ); }
+    | NOT factor { $$ = newFactorNode( @1.first_line, @1.first_column, 5, NULL, NULL, NULL, NULL, NULL, NULL, @2.first_line, @2.first_column ); }
+    | SUBOP factor { $$ = newFactorNode( @1.first_line, @1.first_column, 6, NULL, NULL, NULL, NULL, NULL, $2, @2.first_line, @2.first_column ); }
     ;
 
 addop: ADDOP { $$ = newAddNode( @1.first_line, @1.first_column, 1, @1.first_line, @1.first_column ); }
