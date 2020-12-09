@@ -14,6 +14,7 @@ Node* newRelopNode( int firstLine, int firstColumn, int type, int lastLine, int 
 }
 
 void* RelopNode_visit(void* node){
+    RelopNode* temp = (RelopNode*) node;
 
-    return 0;
+    return temp->type;
 }

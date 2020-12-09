@@ -57,6 +57,7 @@ void* SubDeclarNode_visit(void* node){
             tempList = newfunclist( temp->head->id, scope, Void, Function );
             if ( checkList(listRoot, temp->head->id, scope, Function) ){
                 fprintf(stderr, REDEF_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
+
             }else{
                 SHOW_NEWSYM(temp->head->id);
                 list_push_back( listRoot, tempList );
@@ -84,7 +85,6 @@ void* SubDeclarNode_visit(void* node){
                 break;
             }
 
-            
             StatementListNode* checkReturnType = NULL;
             if ( temp->compoundstatementnode->statements != NULL )
                 checkReturnType = temp->compoundstatementnode->statements->statementlistnode;
@@ -98,15 +98,21 @@ void* SubDeclarNode_visit(void* node){
             }
             
             if ( checkList(listRoot, temp->head->id, scope, Function) ){
+                list* listTemp;
+                GetList(listRoot, &listTemp, temp->head->id);
+                ((funcsymbolobj*)listTemp->data)->check = 2;
                 fprintf(stderr, REDEF_FUN, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
+                fprintf(stderr, RETURN_VAL, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
+                // if (check){
+                //     fprintf(stderr, ASSIG_TYPE, checkReturnType->statementnode->node.loc.first_line, checkReturnType->statementnode->node.loc.first_column);
+                // }
             }else{
                 SHOW_NEWSYM(temp->head->id);
                 list_push_back( listRoot, tempList );
+                if (!check)
+                fprintf(stderr, RETURN_VAL, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
             }
 
-            if (!check)
-                fprintf(stderr, RETURN_VAL, temp->node.loc.first_line, temp->node.loc.first_column, temp->head->id);
-                
         }
         
         // create a scope

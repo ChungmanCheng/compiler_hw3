@@ -55,6 +55,14 @@ void* StatementNode_visit(void* node){
 
         if ( ((int)temp1 >= 0) && ((int)temp2 >= 0) && ((int)temp1 != temp2) )
             fprintf(stderr, ASSIG_TYPE, temp->varnode->node.loc.first_line, temp->varnode->node.loc.first_column);
+        else if ( GetList(listRoot, &listTemp, temp->varnode->id) ){
+            if (listTemp->nodeType == Function){
+                if ( ((funcsymbolobj*)listTemp->data)->check > 1 ){
+                    ((funcsymbolobj*)listTemp->data)->check--;
+                    fprintf(stderr, ASSIG_TYPE, temp->varnode->node.loc.first_line, temp->varnode->node.loc.first_column);
+                }
+            }
+        }
 
         break;
 
